@@ -1,0 +1,52 @@
+.notification-panel{
+  position: absolute;
+  font-size: 20px;
+  top: 80px;
+  right: 10px;
+  overflow: hidden;
+}
+
+.notification{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  background-color: var(--light-gray-color);
+  padding: 10px;
+  width: 300px;
+  height: 90px;
+  border-radius: 10px;
+  border: 1px solid var(--gray-block-color);
+  box-shadow: inset 3px 3px 5px -3px black ;
+  animation: slideNotice 1s ease-in-out ;
+}
+
+@keyframes slideNotice{
+  0% { transform:translateX(500px) }
+  100% { transform:none }
+}
+
+
+.notification p{
+  width: 260;
+}
+
+.product-img{
+  width: 75px;
+  height: 75px;
+  border: 1px solid white;
+  margin-right: 3px;
+}
+
+
+.notification-close{
+  height: 15px;
+  width: 15px;
+}
+
+.notification-close:hover{
+ cursor: pointer;
+}
+
+.notification-close:active{
+  padding: 1px;
+}

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/core/account/auth-service';
 import { TripReportParameters } from 'src/app/core/models/utility/trip-report-parameters';
+import { NotificationService } from 'src/app/core/services/notification-service';
 import { TripReportService } from 'src/app/core/services/trip-report.sevice';
 
 @Component({
@@ -16,6 +17,7 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     public authService: AuthService,
+    public notificationService: NotificationService,
     private tripReportService: TripReportService) { }
 
   ngOnInit(): void { }
@@ -25,9 +27,10 @@ export class HeaderComponent implements OnInit {
   }
 
   getTripReports(){
-    console.log(1);
     this.tripReportService.getReportAboutAllTrips(this.tripReportParameters).subscribe(res =>
     console.log(res)
     );
+
+    this.notificationService.ErrorNotice('suck');
   }
 }
