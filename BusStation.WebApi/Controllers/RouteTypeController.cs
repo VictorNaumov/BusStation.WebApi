@@ -21,10 +21,10 @@ namespace Products.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet(Name = "GetRouteTypes")]
-        public async Task<IActionResult> GetRouteTypes()
+        [HttpGet(Name = "GetAllRouteTypes")]
+        public async Task<IActionResult> GetAllRouteTypes()
         {
-            var routeTypes = await _repository.RouteType.GetAllRouteTypesAsync(trackChanges: false);
+            var routeTypes = await _repository.RouteType.GetAllRouteTypes(trackChanges: false);
             if (routeTypes.ToList().Count == 0)
             {
                 return NotFound();

@@ -27,8 +27,8 @@ namespace Products.Controllers
         }
 
 
-        [HttpGet(Name = "GetTrips")]
-        public async Task<IActionResult> GetTrips([FromQuery] TripParameters tripParameters)
+        [HttpGet(Name = "GetAllTrips")]
+        public async Task<IActionResult> GetAllTrips([FromQuery] TripParameters tripParameters)
         {
             var trips = await _repository.Trip.GetAllTripsAsync(tripParameters, trackChanges: false);
             if (trips.ToList().Count == 0)

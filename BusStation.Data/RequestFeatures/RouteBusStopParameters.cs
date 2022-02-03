@@ -8,7 +8,5 @@
         }
 
         public string SearchTerm { get; set; }
-        public string ArrivalBusStop { get; set; }
-        public string DepartureBusStop { get; set; }
     }
 }

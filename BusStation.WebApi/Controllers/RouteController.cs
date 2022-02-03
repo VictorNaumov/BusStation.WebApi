@@ -24,8 +24,8 @@ namespace Products.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet(Name = "GetRoutes")]
-        public async Task<IActionResult> GetRoutes()
+        [HttpGet(Name = "GetAllRoutes")]
+        public async Task<IActionResult> GetAllRoutes()
         {
             var routes = await _repository.Route.GetAllRoutesAsync(trackChanges: false);
             if (routes.ToList().Count == 0)

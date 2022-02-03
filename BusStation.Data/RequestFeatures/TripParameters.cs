@@ -8,8 +8,7 @@
         }
 
         public string SearchTerm { get; set; }
-        public string BusStop { get; set; }
-        public string MinPrice { get; set; }
-        public string MaxPrice { get; set; }
+        public int MinPrice { get; set; }
+        public int MaxPrice { get; set; }
     }
 }

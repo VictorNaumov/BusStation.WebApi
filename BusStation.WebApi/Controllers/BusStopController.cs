@@ -27,8 +27,8 @@ namespace Products.Controllers
         }
 
 
-        [HttpGet(Name = "GetBusStops")]
-        public async Task<IActionResult> GetBusStops([FromQuery] BusStopParameters busStopParameters)
+        [HttpGet(Name = "GetAllBusStops")]
+        public async Task<IActionResult> GetAllBusStops([FromQuery] BusStopParameters busStopParameters)
         {
             var busStops = await _repository.BusStop.GetAllBusStopsAsync(busStopParameters, trackChanges: false);
             if (busStops.ToList().Count == 0)

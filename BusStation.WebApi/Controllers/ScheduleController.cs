@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Products.Controllers
 {
-    [Route("api/tripReport")]
+    [Route("api/schedule")]
     [ApiController]
     public class ScheduleController : ControllerBase
     {
@@ -22,10 +22,10 @@ namespace Products.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet(Name = "GetSchedules")]
+        [HttpGet(Name = "GetAllSchedules")]
         public async Task<IActionResult> GetDayes()
         {
-            var dayes = await _repository.Schedule.GetAllSchedulesAsync(trackChanges: false);
+            var dayes = await _repository.Schedule.GetAllSchedules(trackChanges: false);
             if (dayes.ToList().Count == 0)
             {
                 return NotFound();

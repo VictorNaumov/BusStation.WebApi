@@ -27,8 +27,8 @@ namespace Products.Controllers
         }
 
 
-        [HttpGet(Name = "GetBuses")]
-        public async Task<IActionResult> GetBuses([FromQuery] BusParameters busParameters)
+        [HttpGet(Name = "GetAllBuses")]
+        public async Task<IActionResult> GetAllBuses([FromQuery] BusParameters busParameters)
         {
             var buses = await _repository.Bus.GetAllBusesAsync(busParameters, trackChanges: false);
             if (buses.ToList().Count == 0)
@@ -40,8 +40,8 @@ namespace Products.Controllers
             return Ok(busesDTO);
         }
 
-        [HttpGet("{id}", Name = "GetBus")]
-        public async Task<IActionResult> GetBus(int id)
+        [HttpGet("{id}", Name = "GetBusById")]
+        public async Task<IActionResult> GetBusById(int id)
         {
             var busEntity = await _repository.Bus.GetBusByIdAsync(id, trackChanges: false);
 

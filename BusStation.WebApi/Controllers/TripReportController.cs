@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Products.Controllers
 {
-    [Route("api/schedules")]
+    [Route("api/tripReport")]
     [ApiController]
     public class TripReportController : ControllerBase
     {
@@ -23,8 +23,8 @@ namespace Products.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet(Name = "CreateReportAboutAllTrips")]
-        public async Task<IActionResult> CreateReportAboutAllTrips([FromQuery] TripReportParameters tripReportParameters)
+        [HttpGet(Name = "GetReportAboutAllTrips")]
+        public async Task<IActionResult> GetReportAboutAllTrips([FromQuery] TripReportParameters tripReportParameters)
         {
             var tripReportsEntities = await _repository.TripReport.GetAllTripReportsAsync(tripReportParameters, trackChanges: false);
             var tripReportsDTO = _mapper.Map<IEnumerable<TripReportOutgoingDTO>>(tripReportsEntities);
