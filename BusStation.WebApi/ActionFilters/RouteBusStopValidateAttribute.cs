@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace BusStopStation.WebApi.ActionFilters
 {
-    public class TripValidateAttribute : ValidationAttributeBase<Trip>, IAsyncActionFilter
+    public class RouteBusStopValidateAttribute : ValidationAttributeBase<RouteBusStop>, IAsyncActionFilter
     {
         private readonly IRepositoryManager _repository;
 
-        public TripValidateAttribute(IRepositoryManager repository)
+        public RouteBusStopValidateAttribute(IRepositoryManager repository)
             : base()
         {
             _repository = repository;
@@ -25,10 +25,11 @@ namespace BusStopStation.WebApi.ActionFilters
 
             if (method != "POST")
             {
-                var id = (int)context.ActionArguments["id"];
+                var routeId = (int)context.ActionArguments["routeId"];
+                var busStopId = (int)context.ActionArguments["busStopId"];
 
-                var trip = await _repository.Trip.GetTripByIdAsync(id, trackChanges: false);
-                if (IsNullEntity(context, trip, id))
+                var busStop = await _repository.RouteBusStop.GetRouteBusStopByIdsAsync(routeId, busStopId, trackChanges: false);
+                if (IsNullEntity(context, busStop))
                     return;
             }
 

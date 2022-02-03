@@ -28,7 +28,7 @@ namespace BusStopStation.WebApi.ActionFilters
                 var id = (int)context.ActionArguments["id"];
 
                 var route = await _repository.Route.GetRouteByIdAsync(id, trackChanges: false);
-                if (IsNullEntity(context, route, id))
+                if (IsNullEntity(context, route))
                     return;
             }
 

@@ -36,7 +36,7 @@ namespace Products.Controllers
         }
 
         [HttpGet("{id}", Name = "GetRouteTypeById")]
-        public async Task<IActionResult> GetRouteType(int id)
+        public async Task<IActionResult> GetRouteTypeById(int id)
         {
             var routeTypeEntity = await _repository.RouteType.GetRouteTypeByIdAsync(id, trackChanges: false);
 

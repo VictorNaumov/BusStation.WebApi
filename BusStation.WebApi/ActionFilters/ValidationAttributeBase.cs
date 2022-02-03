@@ -37,7 +37,7 @@ namespace BusStation.WebApi.ActionFilters
             return true;
         }
 
-        public bool IsNullEntity(ActionExecutingContext context, T entity, int id)
+        public bool IsNullEntity(ActionExecutingContext context, T entity)
         {
             if (entity == null)
             {

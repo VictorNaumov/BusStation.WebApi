@@ -9,40 +9,40 @@ using System.Threading.Tasks;
 
 namespace Products.Controllers
 {
-    [Route("api/scheduleDayes")]
+    [Route("api/tripReport")]
     [ApiController]
-    public class ScheduleDayController : ControllerBase
+    public class ScheduleController : ControllerBase
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;
 
-        public ScheduleDayController(IRepositoryManager repository, IMapper mapper)
+        public ScheduleController(IRepositoryManager repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
 
-        [HttpGet(Name = "GetScheduleDayes")]
+        [HttpGet(Name = "GetSchedules")]
         public async Task<IActionResult> GetDayes()
         {
-            var dayes = await _repository.ScheduleDay.GetAllDayesAsync(trackChanges: false);
+            var dayes = await _repository.Schedule.GetAllSchedulesAsync(trackChanges: false);
             if (dayes.ToList().Count == 0)
             {
                 return NotFound();
             }
 
-            var dayesDto = _mapper.Map<IEnumerable<ScheduleDayOutgoingDTO>>(dayes);
+            var dayesDto = _mapper.Map<IEnumerable<ScheduleOutgoingDTO>>(dayes);
 
             return Ok(dayesDto);
         }
 
-        [HttpGet("{id}", Name = "GetScheduleDayById")]
+        [HttpGet("{id}", Name = "GetScheduleById")]
         [Authorize]
-        public async Task<IActionResult> GetDay(int id)
+        public async Task<IActionResult> GetScheduleById(int id)
         {
-            var dayEntity = await _repository.ScheduleDay.GetDayByIdAsync(id, trackChanges: false);
+            var dayEntity = await _repository.Schedule.GetScheduleByIdAsync(id, trackChanges: false);
 
-            var dayDto = _mapper.Map<ScheduleDayOutgoingDTO>(dayEntity);
+            var dayDto = _mapper.Map<ScheduleOutgoingDTO>(dayEntity);
 
             return Ok(dayDto);
         }

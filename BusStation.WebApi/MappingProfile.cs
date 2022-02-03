@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using BusStation.Data;
 using BusStation.Data.DataTransferObjects.Admin;
 using BusStation.Data.DataTransferObjects.Incoming;
 using BusStation.Data.DataTransferObjects.Outgoing;
 using BusStation.Data.Models;
-using System.Linq;
 
 namespace BusStation.WebApi
 {
@@ -16,29 +14,27 @@ namespace BusStation.WebApi
             CreateMap<Bus, BusOutgoingDTO>();
             CreateMap<BusIncomingDTO, Bus>();
 
+            CreateMap<RouteBusStop, RouteBusStopOutgoingDTO>();
+            CreateMap<RouteBusStopIncomingDTO, RouteBusStop>();
+
             CreateMap<BusStop, BusStopOutgoingDTO>();
             CreateMap<BusStopIncomingDTO, BusStop>();
 
-            CreateMap<Node, NodeOutgoingDTO>()
-                .ForMember(x => x.FirstBusStop, opt => opt.MapFrom(x => x.FirstBusStop.Name))
-                .ForMember(x => x.SecondBusStop, opt => opt.MapFrom(x => x.SecondBusStop.Name));
-            CreateMap<NodeIncomingDTO, Node>();
-
-            CreateMap<Route, RouteOutgoingDTO>();
+            CreateMap<Route, RouteOutgoingDTO>()
+                .ForMember(x => x.RouteType, opt => opt.MapFrom(x => x.RouteType.Name));
             CreateMap<RouteIncomingDTO, Route>();
 
-            CreateMap<RouteNode, RouteNodeOutgoingDTO>();
-            CreateMap<RouteNodeIncomingDTO, RouteNode>();
-
             CreateMap<RouteType, RouteTypeOutgoingDTO>();
-            CreateMap<ScheduleDay, ScheduleDayOutgoingDTO>();
+            CreateMap<Schedule, ScheduleOutgoingDTO>();
 
-            CreateMap<Trip, TripOutgoingDTO>()
-                .ForMember(x => x.EndTime, opt => opt.MapFrom(x => x.StartTime.AddMinutes(x.Route.RouteNodes.Sum(r => r.Node.MinutesInWay))));
+            CreateMap<Trip, TripOutgoingDTO>();
             CreateMap<TripIncomingDTO, Trip>();
 
             CreateMap<AdminValidationDTO, Admin>();
             CreateMap<AdminRegistrationDTO, Admin>();
+
+            CreateMap<TripReport, TripReportOutgoingDTO>();
+            CreateMap<BusStop, BusStopForReportOutgoingDTO>();
         }
     }
 }

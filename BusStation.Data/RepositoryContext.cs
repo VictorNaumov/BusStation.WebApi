@@ -15,36 +15,41 @@ namespace BusStation.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Bus>().HasMany(x => x.Trips).WithOne(y => y.Bus);
 
-            modelBuilder.Entity<BusStop>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<BusStop>().Property(x => x.Name).IsRequired();
 
-            modelBuilder.Entity<Route>().HasMany(x => x.RouteNodes).WithOne(y => y.Route);
-            modelBuilder.Entity<Route>().HasMany(x => x.Trips).WithOne(y => y.Route);
             modelBuilder.Entity<Route>().HasOne(x => x.RouteType);
+            modelBuilder.Entity<Route>().HasMany(p => p.BusStops).WithMany(p => p.Routes)
+                .UsingEntity<RouteBusStop>(
+                    j => j
+                        .HasOne(pt => pt.BusStop)
+                        .WithMany(t => t.RouteBusStops)
+                        .HasForeignKey(pt => pt.BusStopId),
+                    j => j
+                        .HasOne(pt => pt.Route)
+                        .WithMany(p => p.RouteBusStops)
+                        .HasForeignKey(pt => pt.RouteId),
+                    j =>
+                    {
+                        j.HasKey(t => new { t.RouteId, t.BusStopId, t.Order });
+                    });
 
-            modelBuilder.Entity<RouteNode>().HasOne(x => x.Route).WithMany(y => y.RouteNodes);
-            modelBuilder.Entity<RouteNode>().HasOne(x => x.Node).WithMany(y => y.RouteNodes);
+            modelBuilder.Entity<TripReport>().HasNoKey().ToView("View_TripReport");
 
-            modelBuilder.Entity<Node>().HasAlternateKey(x => x.Id);
-            modelBuilder.Entity<Node>().HasKey(x => new { x.FirstBusStopId, x.SecondBusStopId });
-            modelBuilder.Entity<Node>().HasOne(x => x.FirstBusStop).WithOne().OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<Node>().HasOne(x => x.SecondBusStop).WithOne().OnDelete(DeleteBehavior.NoAction);
-
-            modelBuilder.Entity<Trip>().HasOne(x => x.Route).WithMany(y => y.Trips);
-            modelBuilder.Entity<Trip>().HasOne(x => x.Bus);
-
-            modelBuilder.ApplyConfiguration(new BusStopConfiguration());
             modelBuilder.ApplyConfiguration(new RouteTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new ScheduleDayConfiguration());
+            modelBuilder.ApplyConfiguration(new ScheduleConfiguration());
+            modelBuilder.ApplyConfiguration(new BusConfiguration());
+            modelBuilder.ApplyConfiguration(new RouteConfiguration());
+            modelBuilder.ApplyConfiguration(new BusStopConfiguration());
+            modelBuilder.ApplyConfiguration(new RouteBusStopConfiguration());
+            modelBuilder.ApplyConfiguration(new TripConfiguration());
         }
 
         public DbSet<Bus> Buses { get; set; }
         public DbSet<BusStop> BusStops { get; set; }
-        public DbSet<Node> Nodes { get; set; }
+        public DbSet<TripReport> TripReports { get; set; }
         public DbSet<Route> Routes { get; set; }
-        public DbSet<RouteNode> RouteNodes { get; set; }
         public DbSet<RouteType> RouteTypes { get; set; }
-        public DbSet<ScheduleDay> ScheduleDayes { get; set; }
+        public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Trip> Trips { get; set; }
     }
 }

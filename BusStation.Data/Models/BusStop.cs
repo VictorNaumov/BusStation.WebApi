@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace BusStation.Data.Models
 {
@@ -11,5 +12,7 @@ namespace BusStation.Data.Models
         [Required(ErrorMessage = "Name is a required field.")]
         [MaxLength(60, ErrorMessage = "Maximum length for the name is 60 charactesrs.")]
         public string Location { get; set; }
+        public ICollection<Route> Routes { get; set; }
+        public List<RouteBusStop> RouteBusStops { get; set; }
     }
 }

@@ -5,7 +5,6 @@ using BusStation.Data.DataTransferObjects.Outgoing;
 using BusStation.Data.Models;
 using BusStation.Data.RequestFeatures;
 using BusStation.WebApi.ActionFilters;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +41,6 @@ namespace Products.Controllers
         }
 
         [HttpGet("{id}", Name = "GetBus")]
-        //[ServiceFilter(typeof(ValidateBusAttribute))]
         public async Task<IActionResult> GetBus(int id)
         {
             var busEntity = await _repository.Bus.GetBusByIdAsync(id, trackChanges: false);
@@ -75,7 +73,7 @@ namespace Products.Controllers
         }
 
         [HttpPut("{id}", Name = "UpdateBus")]
-        [Authorize(Roles = ("Administrator"))]
+        //[Authorize]
         [ServiceFilter(typeof(BusValidateAttribute))]
         public async Task<IActionResult> UpdateBus(int id, [FromBody] BusIncomingDTO bus)
         {
@@ -96,7 +94,7 @@ namespace Products.Controllers
         }
 
         [HttpDelete("{id}", Name = "DeleteBus")]
-        [Authorize(Roles = ("Administrator"))]
+        //[Authorize]
         [ServiceFilter(typeof(BusValidateAttribute))]
         public async Task<IActionResult> DeleteBus(int id)
         {

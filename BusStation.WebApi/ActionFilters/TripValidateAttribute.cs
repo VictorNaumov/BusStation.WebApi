@@ -1,15 +1,16 @@
 ﻿using BusStation.Contracts;
 using BusStation.Data.Models;
+using BusStation.WebApi.ActionFilters;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Threading.Tasks;
 
-namespace BusStation.WebApi.ActionFilters
+namespace BusStopStation.WebApi.ActionFilters
 {
-    public class BusValidateAttribute : ValidationAttributeBase<Bus>, IAsyncActionFilter
+    public class TripValidateAttribute : ValidationAttributeBase<Trip>, IAsyncActionFilter
     {
         private readonly IRepositoryManager _repository;
 
-        public BusValidateAttribute(IRepositoryManager repository)
+        public TripValidateAttribute(IRepositoryManager repository)
             : base()
         {
             _repository = repository;
@@ -26,8 +27,8 @@ namespace BusStation.WebApi.ActionFilters
             {
                 var id = (int)context.ActionArguments["id"];
 
-                var bus = await _repository.Bus.GetBusByIdAsync(id, trackChanges: false);
-                if (IsNullEntity(context, bus))
+                var trip = await _repository.Trip.GetTripByIdAsync(id, trackChanges: false);
+                if (IsNullEntity(context, trip))
                     return;
             }
 

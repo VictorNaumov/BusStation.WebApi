@@ -138,8 +138,6 @@ namespace BusStation.WebApi.Extensions
             services.AddScoped<AdminValidateAttribute>();
             services.AddScoped<BusStopValidateAttribute>();
             services.AddScoped<BusValidateAttribute>();
-            services.AddScoped<NodeValidateAttribute>();
-            services.AddScoped<RouteNodeValidateAttribute>();
             services.AddScoped<RouteValidateAttribute>();
             services.AddScoped<TripValidateAttribute>();
         }

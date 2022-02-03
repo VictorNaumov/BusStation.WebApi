@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace BusStation.Core.Repositories
 {
-    public class ScheduleDayRepository : RepositoryBase<ScheduleDay>, IScheduleDayRepository
+    public class ScheduleRepository : RepositoryBase<Schedule>, IScheduleRepository
     {
-        public ScheduleDayRepository(RepositoryContext repositoryContext) : base(repositoryContext) { }
+        public ScheduleRepository(RepositoryContext repositoryContext) : base(repositoryContext) { }
 
-        public async Task<List<ScheduleDay>> GetAllDayesAsync(bool trackChanges) =>
+        public async Task<List<Schedule>> GetAllSchedulesAsync(bool trackChanges) =>
             await FindAll(trackChanges).ToListAsync();
 
-        public async Task<ScheduleDay> GetDayByIdAsync(int scheduleDayId, bool trackChanges) =>
-            await FindByCondition(c => c.Id.Equals(scheduleDayId), trackChanges)
+        public async Task<Schedule> GetScheduleByIdAsync(int ScheduleId, bool trackChanges) =>
+            await FindByCondition(c => c.Id.Equals(ScheduleId), trackChanges)
             .SingleOrDefaultAsync();
     }
 }

@@ -1,8 +1,8 @@
 ﻿namespace BusStation.Data.RequestFeatures
 {
-    public class RouteNodeParameters : RequestParameters
+    public class TripReportParameters : RequestParameters
     {
-        public RouteNodeParameters()
+        public TripReportParameters()
         {
             OrderBy = "name";
         }

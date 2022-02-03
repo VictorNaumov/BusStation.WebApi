@@ -1,13 +1,12 @@
-﻿using BusStation.Data.Models;
-using System;
+﻿using System;
 
 namespace BusStation.Data.DataTransferObjects.Incoming
 {
     public class TripIncomingDTO
     {
         public int BusId { get; set; }
-        public DateTime StartTime { get; set; }
+        public DateTime DepartureTime { get; set; }
         public int RouteId { get; set; }
-        public int DayOfMovementId { get; set; }
+        public int ScheduleId { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using System;
 
 namespace BusStation.Data.Migrations
 {
-    public partial class InitDb : Migration
+    public partial class InitDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -26,8 +26,6 @@ namespace BusStation.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -54,9 +52,9 @@ namespace BusStation.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Number = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Driver = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Number = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
+                    Driver = table.Column<string>(type: "nvarchar(75)", maxLength: 75, nullable: false),
                     CountOfSeats = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -70,8 +68,8 @@ namespace BusStation.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -92,7 +90,7 @@ namespace BusStation.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ScheduleDayes",
+                name: "Schedules",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -101,7 +99,7 @@ namespace BusStation.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ScheduleDayes", x => x.Id);
+                    table.PrimaryKey("PK_Schedules", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -211,33 +209,6 @@ namespace BusStation.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Nodes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    MinutesInWay = table.Column<int>(type: "int", nullable: false),
-                    WaitingTime = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<int>(type: "int", nullable: false),
-                    FirstBusStopId = table.Column<int>(type: "int", nullable: false),
-                    SecondBusStopId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Nodes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Nodes_BusStops_FirstBusStopId",
-                        column: x => x.FirstBusStopId,
-                        principalTable: "BusStops",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Nodes_BusStops_SecondBusStopId",
-                        column: x => x.SecondBusStopId,
-                        principalTable: "BusStops",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Routes",
                 columns: table => new
                 {
@@ -257,26 +228,26 @@ namespace BusStation.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RouteNodes",
+                name: "RouteBusStop",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Order = table.Column<int>(type: "int", nullable: false),
+                    BusStopId = table.Column<int>(type: "int", nullable: false),
                     RouteId = table.Column<int>(type: "int", nullable: false),
-                    NodeId = table.Column<int>(type: "int", nullable: false),
-                    Order = table.Column<int>(type: "int", nullable: false)
+                    MinutesInWay = table.Column<int>(type: "int", nullable: false),
+                    WaitingTime = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RouteNodes", x => x.Id);
+                    table.PrimaryKey("PK_RouteBusStop", x => new { x.RouteId, x.BusStopId, x.Order });
                     table.ForeignKey(
-                        name: "FK_RouteNodes_Nodes_NodeId",
-                        column: x => x.NodeId,
-                        principalTable: "Nodes",
+                        name: "FK_RouteBusStop_BusStops_BusStopId",
+                        column: x => x.BusStopId,
+                        principalTable: "BusStops",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RouteNodes_Routes_RouteId",
+                        name: "FK_RouteBusStop_Routes_RouteId",
                         column: x => x.RouteId,
                         principalTable: "Routes",
                         principalColumn: "Id",
@@ -289,11 +260,10 @@ namespace BusStation.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BusId = table.Column<int>(type: "int", nullable: true),
-                    IsBack = table.Column<bool>(type: "bit", nullable: false),
+                    DepartureTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BusId = table.Column<int>(type: "int", nullable: false),
                     RouteId = table.Column<int>(type: "int", nullable: false),
-                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DayOfMovementId = table.Column<int>(type: "int", nullable: true)
+                    ScheduleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -303,7 +273,7 @@ namespace BusStation.Data.Migrations
                         column: x => x.BusId,
                         principalTable: "Buses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Trips_Routes_RouteId",
                         column: x => x.RouteId,
@@ -311,11 +281,11 @@ namespace BusStation.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Trips_ScheduleDayes_DayOfMovementId",
-                        column: x => x.DayOfMovementId,
-                        principalTable: "ScheduleDayes",
+                        name: "FK_Trips_Schedules_ScheduleId",
+                        column: x => x.ScheduleId,
+                        principalTable: "Schedules",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -323,19 +293,22 @@ namespace BusStation.Data.Migrations
                 columns: new[] { "Id", "Location", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Novopolotsk", "Bus station" },
-                    { 28, "Polotsk", "College of Economics" },
                     { 30, "Polotsk", "Pedagogical College" },
+                    { 26, "Polotsk", "Power supply" },
+                    { 27, "Polotsk", "Sports Club" },
+                    { 28, "Polotsk", "College of Economics" },
+                    { 29, "Novopolotsk", "Hotel Belarus" },
+                    { 52, "Braslav", "Bus station" },
                     { 31, "Novopolotsk", "Sewing Factory" },
                     { 32, "Novopolotsk", "Printing house" },
                     { 33, "Novopolotsk", "Suvorov" },
                     { 34, "Novopolotsk", "Leningrad" },
                     { 35, "Novopolotsk", "Locomotive Depot" },
                     { 36, "Novopolotsk", "School №14" },
+                    { 25, "Polotsk", "Zapolotye" },
                     { 37, "Novopolotsk", "Move" },
-                    { 38, "Novopolotsk", "Tchaikovsky" },
-                    { 27, "Polotsk", "Sports Club" },
                     { 39, "Novopolotsk", "Griboyedov" },
+                    { 40, "Novopolotsk", "Bagramyan" },
                     { 41, "Novopolotsk", "Kalinina" },
                     { 42, "Polotsl", "Manege" },
                     { 43, "Novopolotsk", "Soyuzpechat" },
@@ -345,11 +318,15 @@ namespace BusStation.Data.Migrations
                     { 47, "Polotsk", "Masherova" },
                     { 48, "Polotsk", "Partisan" },
                     { 49, "Polotsk", "Fleet" },
-                    { 50, "Novopolotsk", "Nevelskaya" },
-                    { 40, "Novopolotsk", "Bagramyan" },
-                    { 26, "Polotsk", "Power supply" },
-                    { 29, "Novopolotsk", "Hotel Belarus" },
+                    { 38, "Novopolotsk", "Tchaikovsky" },
                     { 24, "Polotsk", "Ekiman" },
+                    { 23, "Polotsk", "The Mound of Immortality" },
+                    { 22, "Polotsk", "Ksta Hospital" },
+                    { 56, "Lida", "Bus station" },
+                    { 55, "Grodno", "Bus station" },
+                    { 54, "Brest", "Bus station" },
+                    { 53, "Miory", "Bus station" },
+                    { 1, "Novopolotsk", "Bus station" },
                     { 2, "Novopolotsk", "Shopping centre" },
                     { 3, "Novopolotsk", "Slobodskaya" },
                     { 4, "Novopolotsk", "Gaidara" },
@@ -357,14 +334,7 @@ namespace BusStation.Data.Migrations
                     { 6, "Novopolotsk", "Golden Field" },
                     { 7, "Novopolotsk", "Cosmos Cinema" },
                     { 8, "Novopolotsk", "Youth" },
-                    { 9, "Novopolotsk", "Komsomolskaya" },
-                    { 25, "Polotsk", "Zapolotye" },
-                    { 11, "Novopolotsk", "Cinema Minsk" },
-                    { 12, "Novopolotsk", "Naftan Hotel" },
-                    { 10, "Novopolotsk", "Music School" },
-                    { 14, "Novopolotsk", "Podcastels" },
-                    { 15, "Novopolotsk", "Vasilevtsy" },
-                    { 16, "Novopolotsk", "8th Microdistrict" }
+                    { 9, "Novopolotsk", "Komsomolskaya" }
                 });
 
             migrationBuilder.InsertData(
@@ -372,14 +342,32 @@ namespace BusStation.Data.Migrations
                 columns: new[] { "Id", "Location", "Name" },
                 values: new object[,]
                 {
+                    { 10, "Novopolotsk", "Music School" },
+                    { 11, "Novopolotsk", "Cinema Minsk" },
+                    { 12, "Novopolotsk", "Naftan Hotel" },
+                    { 13, "Novopolotsk", "Factory Meter" },
+                    { 14, "Novopolotsk", "Podcastels" },
+                    { 15, "Novopolotsk", "Vasilevtsy" },
+                    { 16, "Novopolotsk", "8th Microdistrict" },
                     { 17, "Novopolotsk", "Polimirovskaya" },
                     { 18, "Novopolotsk", "Solar" },
                     { 19, "Novopolotsk", "Meadow" },
                     { 20, "Novopolotsk", "Ekiman-1" },
                     { 21, "Novopolotsk", "Ekiman-2" },
-                    { 22, "Polotsk", "Ksta Hospital" },
-                    { 13, "Novopolotsk", "Factory Meter" },
-                    { 23, "Polotsk", "The Mound of Immortality" }
+                    { 50, "Novopolotsk", "Nevelskaya" },
+                    { 51, "Minsk", "Bus station" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Buses",
+                columns: new[] { "Id", "CountOfSeats", "Driver", "Name", "Number" },
+                values: new object[,]
+                {
+                    { 1, 30, "Petrov Vanya", "Tesla Bus", "1363BM" },
+                    { 5, 25, "Ignatiev Ignat", "BMW Bus", "7618BM" },
+                    { 4, 50, "Novikov Evgene", "Audi Bus", "7426BM" },
+                    { 3, 25, "Miller Anton", "Super Bus", "6184BM" },
+                    { 2, 45, "Kokorin Ilya", "Transit Bus", "9123BM" }
                 });
 
             migrationBuilder.InsertData(
@@ -387,21 +375,76 @@ namespace BusStation.Data.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Intercity" },
+                    { 1, "Urban" },
                     { 2, "Suburban" },
-                    { 3, "Urban" }
+                    { 3, "Intercity" }
                 });
 
             migrationBuilder.InsertData(
-                table: "ScheduleDayes",
+                table: "Schedules",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { 3, "Everyday" },
-                    { 4, "Weekend" },
                     { 1, "Even days" },
                     { 2, "Odd days" },
+                    { 3, "Everyday" },
+                    { 4, "Weekend" },
                     { 5, "Weekdays" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Routes",
+                columns: new[] { "Id", "RouteTypeId" },
+                values: new object[,]
+                {
+                    { 1, 1 },
+                    { 2, 1 },
+                    { 3, 2 },
+                    { 4, 2 },
+                    { 5, 3 },
+                    { 6, 3 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "RouteBusStop",
+                columns: new[] { "BusStopId", "Order", "RouteId", "MinutesInWay", "WaitingTime" },
+                values: new object[,]
+                {
+                    { 1, 1, 1, 3, 0 },
+                    { 54, 1, 6, 120, 30 },
+                    { 52, 2, 5, 40, 10 },
+                    { 53, 1, 5, 90, 10 },
+                    { 43, 5, 4, 3, 0 },
+                    { 42, 4, 4, 5, 0 },
+                    { 41, 3, 4, 6, 0 },
+                    { 44, 2, 4, 4, 0 },
+                    { 46, 1, 4, 5, 0 },
+                    { 19, 3, 3, 15, 0 },
+                    { 36, 2, 3, 21, 0 },
+                    { 31, 1, 3, 5, 0 },
+                    { 55, 2, 6, 110, 30 },
+                    { 56, 3, 6, 120, 30 },
+                    { 23, 4, 2, 5, 0 },
+                    { 17, 3, 2, 3, 0 },
+                    { 7, 2, 2, 9, 0 },
+                    { 1, 1, 2, 3, 0 },
+                    { 12, 6, 1, 3, 0 },
+                    { 11, 5, 1, 6, 0 },
+                    { 3, 4, 1, 11, 0 },
+                    { 6, 3, 1, 10, 0 },
+                    { 4, 2, 1, 2, 0 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Trips",
+                columns: new[] { "Id", "BusId", "DepartureTime", "RouteId", "ScheduleId" },
+                values: new object[,]
+                {
+                    { 1, 1, new DateTime(1, 1, 1, 10, 30, 0, 0, DateTimeKind.Unspecified), 2, 5 },
+                    { 2, 1, new DateTime(1, 1, 1, 18, 30, 0, 0, DateTimeKind.Unspecified), 1, 5 },
+                    { 4, 2, new DateTime(1, 1, 1, 9, 0, 0, 0, DateTimeKind.Unspecified), 5, 3 },
+                    { 3, 3, new DateTime(1, 1, 1, 14, 20, 0, 0, DateTimeKind.Unspecified), 2, 4 },
+                    { 5, 1, new DateTime(1, 1, 1, 15, 25, 0, 0, DateTimeKind.Unspecified), 2, 4 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -444,32 +487,9 @@ namespace BusStation.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BusStops_Name",
-                table: "BusStops",
-                column: "Name",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Nodes_FirstBusStopId",
-                table: "Nodes",
-                column: "FirstBusStopId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Nodes_SecondBusStopId",
-                table: "Nodes",
-                column: "SecondBusStopId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RouteNodes_NodeId",
-                table: "RouteNodes",
-                column: "NodeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RouteNodes_RouteId",
-                table: "RouteNodes",
-                column: "RouteId");
+                name: "IX_RouteBusStop_BusStopId",
+                table: "RouteBusStop",
+                column: "BusStopId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Routes_RouteTypeId",
@@ -482,14 +502,14 @@ namespace BusStation.Data.Migrations
                 column: "BusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Trips_DayOfMovementId",
-                table: "Trips",
-                column: "DayOfMovementId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Trips_RouteId",
                 table: "Trips",
                 column: "RouteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Trips_ScheduleId",
+                table: "Trips",
+                column: "ScheduleId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -510,7 +530,7 @@ namespace BusStation.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "RouteNodes");
+                name: "RouteBusStop");
 
             migrationBuilder.DropTable(
                 name: "Trips");
@@ -522,7 +542,7 @@ namespace BusStation.Data.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Nodes");
+                name: "BusStops");
 
             migrationBuilder.DropTable(
                 name: "Buses");
@@ -531,10 +551,7 @@ namespace BusStation.Data.Migrations
                 name: "Routes");
 
             migrationBuilder.DropTable(
-                name: "ScheduleDayes");
-
-            migrationBuilder.DropTable(
-                name: "BusStops");
+                name: "Schedules");
 
             migrationBuilder.DropTable(
                 name: "RouteTypes");

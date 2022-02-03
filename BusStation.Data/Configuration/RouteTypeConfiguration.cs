@@ -13,7 +13,7 @@ namespace BusStation.Data.Configuration
                 new RouteType
                 {
                     Id = 1,
-                    Name = "Intercity"
+                    Name = "Urban"
                 },
                 new RouteType
                 {
@@ -23,7 +23,7 @@ namespace BusStation.Data.Configuration
                 new RouteType
                 {
                     Id = 3,
-                    Name = "Urban"
+                    Name = "Intercity"
                 }
             );
         }

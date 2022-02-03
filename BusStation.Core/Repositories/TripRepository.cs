@@ -1,7 +1,7 @@
 ﻿using BusStation.Contracts;
+using BusStation.Core.Repositories.Extensions;
 using BusStation.Data;
 using BusStation.Data.Models;
-using BusStation.Core.Repositories.Extensions;
 using BusStation.Data.RequestFeatures;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
@@ -16,7 +16,6 @@ namespace BusStation.Core.Repositories
         {
             var trips = await FindAll(trackChanges)
                 .IncludeDependencies()
-                //.Search(tripParameters.SearchTerm)
                 .Sort(tripParameters.OrderBy)
                 .ToListAsync();
 
@@ -27,6 +26,7 @@ namespace BusStation.Core.Repositories
 
         public async Task<Trip> GetTripByIdAsync(int tripId, bool trackChanges) =>
             await FindByCondition(c => c.Id.Equals(tripId), trackChanges)
+            .IncludeDependencies()
             .SingleOrDefaultAsync();
 
         public void CreateTrip(Trip trip) =>

@@ -1,8 +1,6 @@
-﻿using BusStation.Core.Extensions.Utility;
-using BusStation.Data.Models;
+﻿using BusStation.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using System.Linq.Dynamic.Core;
 
 namespace BusStation.Core.Repositories.Extensions
 {
@@ -32,8 +30,6 @@ namespace BusStation.Core.Repositories.Extensions
         //}
 
         public static IQueryable<Route> IncludeDependencies(this IQueryable<Route> routes) =>
-            routes.Include(x => x.RouteNodes)
-                  .Include(x => x.RouteType)
-                  .Include(x => x.Trips);
+            routes.Include(x => x.RouteType);
     }
 }

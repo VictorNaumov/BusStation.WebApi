@@ -4,36 +4,41 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BusStation.Data.Configuration
 {
-    internal class ScheduleConfiguration : IEntityTypeConfiguration<Schedule>
+    internal class RouteConfiguration : IEntityTypeConfiguration<Route>
     {
-        public void Configure(EntityTypeBuilder<Schedule> builder)
+        public void Configure(EntityTypeBuilder<Route> builder)
         {
             builder.HasData
             (
-                new Schedule
+                new Route
                 {
                     Id = 1,
-                    Name = "Even days"
+                    RouteTypeId = 1,
                 },
-                new Schedule
+                new Route
                 {
                     Id = 2,
-                    Name = "Odd days"
+                    RouteTypeId = 1,
                 },
-                new Schedule
+                new Route
                 {
                     Id = 3,
-                    Name = "Everyday"
+                    RouteTypeId = 2,
                 },
-                new Schedule
+                new Route
                 {
                     Id = 4,
-                    Name = "Weekend"
+                    RouteTypeId = 2,
                 },
-                new Schedule
+                new Route
                 {
                     Id = 5,
-                    Name = "Weekdays"
+                    RouteTypeId = 3,
+                },
+                new Route
+                {
+                    Id = 6,
+                    RouteTypeId = 3,
                 }
             );
         }

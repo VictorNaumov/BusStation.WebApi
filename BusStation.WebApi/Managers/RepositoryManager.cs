@@ -10,12 +10,12 @@ namespace BusStation.WebApi.Managers
         private readonly RepositoryContext _repositoryContext;
         private IBusRepository _busRepository;
         private IBusStopRepository _busStopRepository;
-        private IScheduleDayRepository _scheduleDayRepository;
+        private IScheduleRepository _ScheduleRepository;
         private IRouteTypeRepository _routeTypeRepository;
         private IRouteRepository _routeRepository;
-        private IRouteNodeRepository _routeNodeRepository;
-        private INodeRepository _nodeRepository;
+        private IRouteBusStopRepository _routeBusStopRepository;
         private ITripRepository _tripRepository;
+        private ITripReportRepository _tripReportRepository;
         public RepositoryManager(RepositoryContext repositoryContext)
         {
             _repositoryContext = repositoryContext;
@@ -41,14 +41,14 @@ namespace BusStation.WebApi.Managers
                 return _busStopRepository;
             }
         }
-        public IScheduleDayRepository ScheduleDay
+        public IScheduleRepository Schedule
         {
             get
             {
-                if (_scheduleDayRepository == null)
-                    _scheduleDayRepository = new ScheduleDayRepository(_repositoryContext);
+                if (_ScheduleRepository == null)
+                    _ScheduleRepository = new ScheduleRepository(_repositoryContext);
 
-                return _scheduleDayRepository;
+                return _ScheduleRepository;
             }
         }
         public IRouteTypeRepository RouteType
@@ -71,24 +71,14 @@ namespace BusStation.WebApi.Managers
                 return _routeRepository;
             }
         }
-        public IRouteNodeRepository RouteNode
+        public IRouteBusStopRepository RouteBusStop
         {
             get
             {
-                if (_routeNodeRepository == null)
-                    _routeNodeRepository = new RouteNodeRepository(_repositoryContext);
+                if (_routeBusStopRepository == null)
+                    _routeBusStopRepository = new RouteBusStopRepository(_repositoryContext);
 
-                return _routeNodeRepository;
-            }
-        }
-        public INodeRepository Node
-        {
-            get
-            {
-                if (_nodeRepository == null)
-                    _nodeRepository = new NodeRepository(_repositoryContext);
-
-                return _nodeRepository;
+                return _routeBusStopRepository;
             }
         }
         public ITripRepository Trip
@@ -99,6 +89,17 @@ namespace BusStation.WebApi.Managers
                     _tripRepository = new TripRepository(_repositoryContext);
 
                 return _tripRepository;
+            }
+        }
+
+        public ITripReportRepository TripReport
+        {
+            get
+            {
+                if (_tripReportRepository == null)
+                    _tripReportRepository = new TripReportRepository(_repositoryContext);
+
+                return _tripReportRepository;
             }
         }
 

@@ -5,7 +5,6 @@ using BusStation.Data.DataTransferObjects.Outgoing;
 using BusStation.Data.Models;
 using BusStation.Data.RequestFeatures;
 using BusStopStation.WebApi.ActionFilters;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,9 +40,9 @@ namespace Products.Controllers
             return Ok(busStopsDTO);
         }
 
-        [HttpGet("{id}", Name = "GetBusStop")]
+        [HttpGet("{id}", Name = "GetBusStopById")]
         [ServiceFilter(typeof(BusStopValidateAttribute))]
-        public async Task<IActionResult> GetBusStop(int id)
+        public async Task<IActionResult> GetBusStopById(int id)
         {
             var busStopEntity = await _repository.BusStop.GetBusStopByIdAsync(id, trackChanges: false);
 
@@ -53,7 +52,7 @@ namespace Products.Controllers
         }
 
         [HttpPost(Name = "CreateBusStop")]
-        [Authorize]
+        //[Authorize]
         [ServiceFilter(typeof(BusStopValidateAttribute))]
         public async Task<IActionResult> CreateBusStop([FromBody] BusStopIncomingDTO busStop)
         {
@@ -72,11 +71,11 @@ namespace Products.Controllers
 
             var busStopToReturn = _mapper.Map<BusStopOutgoingDTO>(busStopEntity);
 
-            return RedirectToRoute("GetBusStop", new { id = busStopToReturn.Id });
+            return RedirectToRoute("GetBusStopById", new { id = busStopToReturn.Id });
         }
 
         [HttpPut("{id}", Name = "UpdateBusStop")]
-        [Authorize]
+        //[Authorize]
         [ServiceFilter(typeof(BusStopValidateAttribute))]
         public async Task<IActionResult> UpdateBusStop(int id, [FromBody] BusStopIncomingDTO bus)
         {
@@ -97,7 +96,7 @@ namespace Products.Controllers
         }
 
         [HttpDelete("{id}", Name = "DeleteBusStop")]
-        [Authorize]
+        //[Authorize]
         [ServiceFilter(typeof(BusStopValidateAttribute))]
         public async Task<IActionResult> DeleteBusStop(int id)
         {

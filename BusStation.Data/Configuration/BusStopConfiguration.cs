@@ -309,37 +309,43 @@ namespace BusStation.Data.Configuration
                     Id = 50,
                     Name = "Nevelskaya",
                     Location = "Novopolotsk"
+                },
+                new BusStop
+                {
+                    Id = 51,
+                    Name = "Bus station",
+                    Location = "Minsk"
+                },
+                new BusStop
+                {
+                    Id = 52,
+                    Name = "Bus station",
+                    Location = "Braslav"
+                },
+                new BusStop
+                {
+                    Id = 53,
+                    Name = "Bus station",
+                    Location = "Miory"
+                },
+                new BusStop
+                {
+                    Id = 54,
+                    Name = "Bus station",
+                    Location = "Brest"
+                },
+                new BusStop
+                {
+                    Id = 55,
+                    Name = "Bus station",
+                    Location = "Grodno"
+                },
+                new BusStop
+                {
+                    Id = 56,
+                    Name = "Bus station",
+                    Location = "Lida"
                 }
-                //new BusStop
-                //{
-                //    Id = 51,
-                //    Name = "Bus station",
-                //    Location = "Novopolotsk"
-                //},
-                //new BusStop
-                //{
-                //    Id = 52,
-                //    Name = "Shopping centre",
-                //    Location = "Novopolotsk"
-                //},
-                //new BusStop
-                //{
-                //    Id = 53,
-                //    Name = "Slobodskaya",
-                //    Location = "Novopolotsk"
-                //},
-                //new BusStop
-                //{
-                //    Id = 54,
-                //    Name = "Gaidara",
-                //    Location = "Novopolotsk"
-                //},
-                //new BusStop
-                //{
-                //    Id = 55,
-                //    Name = "The First Tent",
-                //    Location = "Novopolotsk"
-                //},
                 //new BusStop
                 //{
                 //    Id = 56,

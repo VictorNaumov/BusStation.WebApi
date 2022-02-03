@@ -6,12 +6,12 @@ namespace BusStation.Contracts
     {
         IBusRepository Bus { get; }
         IBusStopRepository BusStop { get; }
-        IScheduleDayRepository ScheduleDay { get; }
+        IScheduleRepository Schedule { get; }
         IRouteTypeRepository RouteType { get; }
         IRouteRepository Route { get; }
-        IRouteNodeRepository RouteNode { get; }
-        INodeRepository Node { get; }
+        IRouteBusStopRepository RouteBusStop { get; }
         ITripRepository Trip { get; }
+        ITripReportRepository TripReport { get; }
         public Task SaveAsync();
     }
 }

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusStation.Data.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20220202110437_InitDb")]
-    partial class InitDb
+    [Migration("20220203113503_InitDB")]
+    partial class InitDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace BusStation.Data.Migrations
                 .HasAnnotation("ProductVersion", "5.0.7")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("BusStation.Data.DataTransferObjects.AdminAccount.Admin", b =>
+            modelBuilder.Entity("BusStation.Data.DataTransferObjects.Admin.Admin", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -39,12 +39,6 @@ namespace BusStation.Data.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -103,17 +97,65 @@ namespace BusStation.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Driver")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(75)
+                        .HasColumnType("nvarchar(75)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("Number")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Buses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CountOfSeats = 30,
+                            Driver = "Petrov Vanya",
+                            Name = "Tesla Bus",
+                            Number = "1363BM"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CountOfSeats = 45,
+                            Driver = "Kokorin Ilya",
+                            Name = "Transit Bus",
+                            Number = "9123BM"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CountOfSeats = 25,
+                            Driver = "Miller Anton",
+                            Name = "Super Bus",
+                            Number = "6184BM"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CountOfSeats = 50,
+                            Driver = "Novikov Evgene",
+                            Name = "Audi Bus",
+                            Number = "7426BM"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CountOfSeats = 25,
+                            Driver = "Ignatiev Ignat",
+                            Name = "BMW Bus",
+                            Number = "7618BM"
+                        });
                 });
 
             modelBuilder.Entity("BusStation.Data.Models.BusStop", b =>
@@ -124,16 +166,16 @@ namespace BusStation.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.ToTable("BusStops");
 
@@ -437,40 +479,43 @@ namespace BusStation.Data.Migrations
                             Id = 50,
                             Location = "Novopolotsk",
                             Name = "Nevelskaya"
+                        },
+                        new
+                        {
+                            Id = 51,
+                            Location = "Minsk",
+                            Name = "Bus station"
+                        },
+                        new
+                        {
+                            Id = 52,
+                            Location = "Braslav",
+                            Name = "Bus station"
+                        },
+                        new
+                        {
+                            Id = 53,
+                            Location = "Miory",
+                            Name = "Bus station"
+                        },
+                        new
+                        {
+                            Id = 54,
+                            Location = "Brest",
+                            Name = "Bus station"
+                        },
+                        new
+                        {
+                            Id = 55,
+                            Location = "Grodno",
+                            Name = "Bus station"
+                        },
+                        new
+                        {
+                            Id = 56,
+                            Location = "Lida",
+                            Name = "Bus station"
                         });
-                });
-
-            modelBuilder.Entity("BusStation.Data.Models.Node", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("FirstBusStopId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MinutesInWay")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SecondBusStopId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WaitingTime")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FirstBusStopId")
-                        .IsUnique();
-
-                    b.HasIndex("SecondBusStopId")
-                        .IsUnique();
-
-                    b.ToTable("Nodes");
                 });
 
             modelBuilder.Entity("BusStation.Data.Models.Route", b =>
@@ -488,31 +533,248 @@ namespace BusStation.Data.Migrations
                     b.HasIndex("RouteTypeId");
 
                     b.ToTable("Routes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            RouteTypeId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            RouteTypeId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            RouteTypeId = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            RouteTypeId = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            RouteTypeId = 3
+                        },
+                        new
+                        {
+                            Id = 6,
+                            RouteTypeId = 3
+                        });
                 });
 
-            modelBuilder.Entity("BusStation.Data.Models.RouteNode", b =>
+            modelBuilder.Entity("BusStation.Data.Models.RouteBusStop", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("RouteId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("NodeId")
+                    b.Property<int>("BusStopId")
                         .HasColumnType("int");
 
                     b.Property<int>("Order")
                         .HasColumnType("int");
 
-                    b.Property<int>("RouteId")
+                    b.Property<int>("MinutesInWay")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<int>("WaitingTime")
+                        .HasColumnType("int");
 
-                    b.HasIndex("NodeId");
+                    b.HasKey("RouteId", "BusStopId", "Order");
 
-                    b.HasIndex("RouteId");
+                    b.HasIndex("BusStopId");
 
-                    b.ToTable("RouteNodes");
+                    b.ToTable("RouteBusStop");
+
+                    b.HasData(
+                        new
+                        {
+                            RouteId = 1,
+                            BusStopId = 1,
+                            Order = 1,
+                            MinutesInWay = 3,
+                            WaitingTime = 0
+                        },
+                        new
+                        {
+                            RouteId = 1,
+                            BusStopId = 4,
+                            Order = 2,
+                            MinutesInWay = 2,
+                            WaitingTime = 0
+                        },
+                        new
+                        {
+                            RouteId = 1,
+                            BusStopId = 6,
+                            Order = 3,
+                            MinutesInWay = 10,
+                            WaitingTime = 0
+                        },
+                        new
+                        {
+                            RouteId = 1,
+                            BusStopId = 3,
+                            Order = 4,
+                            MinutesInWay = 11,
+                            WaitingTime = 0
+                        },
+                        new
+                        {
+                            RouteId = 1,
+                            BusStopId = 11,
+                            Order = 5,
+                            MinutesInWay = 6,
+                            WaitingTime = 0
+                        },
+                        new
+                        {
+                            RouteId = 1,
+                            BusStopId = 12,
+                            Order = 6,
+                            MinutesInWay = 3,
+                            WaitingTime = 0
+                        },
+                        new
+                        {
+                            RouteId = 2,
+                            BusStopId = 1,
+                            Order = 1,
+                            MinutesInWay = 3,
+                            WaitingTime = 0
+                        },
+                        new
+                        {
+                            RouteId = 2,
+                            BusStopId = 7,
+                            Order = 2,
+                            MinutesInWay = 9,
+                            WaitingTime = 0
+                        },
+                        new
+                        {
+                            RouteId = 2,
+                            BusStopId = 17,
+                            Order = 3,
+                            MinutesInWay = 3,
+                            WaitingTime = 0
+                        },
+                        new
+                        {
+                            RouteId = 2,
+                            BusStopId = 23,
+                            Order = 4,
+                            MinutesInWay = 5,
+                            WaitingTime = 0
+                        },
+                        new
+                        {
+                            RouteId = 3,
+                            BusStopId = 31,
+                            Order = 1,
+                            MinutesInWay = 5,
+                            WaitingTime = 0
+                        },
+                        new
+                        {
+                            RouteId = 3,
+                            BusStopId = 36,
+                            Order = 2,
+                            MinutesInWay = 21,
+                            WaitingTime = 0
+                        },
+                        new
+                        {
+                            RouteId = 3,
+                            BusStopId = 19,
+                            Order = 3,
+                            MinutesInWay = 15,
+                            WaitingTime = 0
+                        },
+                        new
+                        {
+                            RouteId = 4,
+                            BusStopId = 46,
+                            Order = 1,
+                            MinutesInWay = 5,
+                            WaitingTime = 0
+                        },
+                        new
+                        {
+                            RouteId = 4,
+                            BusStopId = 44,
+                            Order = 2,
+                            MinutesInWay = 4,
+                            WaitingTime = 0
+                        },
+                        new
+                        {
+                            RouteId = 4,
+                            BusStopId = 41,
+                            Order = 3,
+                            MinutesInWay = 6,
+                            WaitingTime = 0
+                        },
+                        new
+                        {
+                            RouteId = 4,
+                            BusStopId = 42,
+                            Order = 4,
+                            MinutesInWay = 5,
+                            WaitingTime = 0
+                        },
+                        new
+                        {
+                            RouteId = 4,
+                            BusStopId = 43,
+                            Order = 5,
+                            MinutesInWay = 3,
+                            WaitingTime = 0
+                        },
+                        new
+                        {
+                            RouteId = 5,
+                            BusStopId = 53,
+                            Order = 1,
+                            MinutesInWay = 90,
+                            WaitingTime = 10
+                        },
+                        new
+                        {
+                            RouteId = 5,
+                            BusStopId = 52,
+                            Order = 2,
+                            MinutesInWay = 40,
+                            WaitingTime = 10
+                        },
+                        new
+                        {
+                            RouteId = 6,
+                            BusStopId = 54,
+                            Order = 1,
+                            MinutesInWay = 120,
+                            WaitingTime = 30
+                        },
+                        new
+                        {
+                            RouteId = 6,
+                            BusStopId = 55,
+                            Order = 2,
+                            MinutesInWay = 110,
+                            WaitingTime = 30
+                        },
+                        new
+                        {
+                            RouteId = 6,
+                            BusStopId = 56,
+                            Order = 3,
+                            MinutesInWay = 120,
+                            WaitingTime = 30
+                        });
                 });
 
             modelBuilder.Entity("BusStation.Data.Models.RouteType", b =>
@@ -533,7 +795,7 @@ namespace BusStation.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Intercity"
+                            Name = "Urban"
                         },
                         new
                         {
@@ -543,11 +805,11 @@ namespace BusStation.Data.Migrations
                         new
                         {
                             Id = 3,
-                            Name = "Urban"
+                            Name = "Intercity"
                         });
                 });
 
-            modelBuilder.Entity("BusStation.Data.Models.ScheduleDay", b =>
+            modelBuilder.Entity("BusStation.Data.Models.Schedule", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -559,7 +821,7 @@ namespace BusStation.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ScheduleDayes");
+                    b.ToTable("Schedules");
 
                     b.HasData(
                         new
@@ -596,30 +858,110 @@ namespace BusStation.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("BusId")
+                    b.Property<int>("BusId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DayOfMovementId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsBack")
-                        .HasColumnType("bit");
+                    b.Property<DateTime>("DepartureTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("RouteId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("ScheduleId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BusId");
 
-                    b.HasIndex("DayOfMovementId");
-
                     b.HasIndex("RouteId");
 
+                    b.HasIndex("ScheduleId");
+
                     b.ToTable("Trips");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BusId = 1,
+                            DepartureTime = new DateTime(1, 1, 1, 10, 30, 0, 0, DateTimeKind.Unspecified),
+                            RouteId = 2,
+                            ScheduleId = 5
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BusId = 1,
+                            DepartureTime = new DateTime(1, 1, 1, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            RouteId = 1,
+                            ScheduleId = 5
+                        },
+                        new
+                        {
+                            Id = 3,
+                            BusId = 3,
+                            DepartureTime = new DateTime(1, 1, 1, 14, 20, 0, 0, DateTimeKind.Unspecified),
+                            RouteId = 2,
+                            ScheduleId = 4
+                        },
+                        new
+                        {
+                            Id = 4,
+                            BusId = 2,
+                            DepartureTime = new DateTime(1, 1, 1, 9, 0, 0, 0, DateTimeKind.Unspecified),
+                            RouteId = 5,
+                            ScheduleId = 3
+                        },
+                        new
+                        {
+                            Id = 5,
+                            BusId = 1,
+                            DepartureTime = new DateTime(1, 1, 1, 15, 25, 0, 0, DateTimeKind.Unspecified),
+                            RouteId = 2,
+                            ScheduleId = 4
+                        });
+                });
+
+            modelBuilder.Entity("BusStation.Data.Models.TripReport", b =>
+                {
+                    b.Property<string>("BusDriver")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("BusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BusName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BusNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CountOfSeats")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DepartureTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("RouteId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RouteTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RouteTypeName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ScheduleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ScheduleName")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TripId")
+                        .HasColumnType("int");
+
+                    b.ToView("View_TripReport");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -753,25 +1095,6 @@ namespace BusStation.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("BusStation.Data.Models.Node", b =>
-                {
-                    b.HasOne("BusStation.Data.Models.BusStop", "FirstBusStop")
-                        .WithOne()
-                        .HasForeignKey("BusStation.Data.Models.Node", "FirstBusStopId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("BusStation.Data.Models.BusStop", "SecondBusStop")
-                        .WithOne()
-                        .HasForeignKey("BusStation.Data.Models.Node", "SecondBusStopId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("FirstBusStop");
-
-                    b.Navigation("SecondBusStop");
-                });
-
             modelBuilder.Entity("BusStation.Data.Models.Route", b =>
                 {
                     b.HasOne("BusStation.Data.Models.RouteType", "RouteType")
@@ -783,21 +1106,21 @@ namespace BusStation.Data.Migrations
                     b.Navigation("RouteType");
                 });
 
-            modelBuilder.Entity("BusStation.Data.Models.RouteNode", b =>
+            modelBuilder.Entity("BusStation.Data.Models.RouteBusStop", b =>
                 {
-                    b.HasOne("BusStation.Data.Models.Node", "Node")
-                        .WithMany("RouteNodes")
-                        .HasForeignKey("NodeId")
+                    b.HasOne("BusStation.Data.Models.BusStop", "BusStop")
+                        .WithMany("RouteBusStops")
+                        .HasForeignKey("BusStopId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BusStation.Data.Models.Route", "Route")
-                        .WithMany("RouteNodes")
+                        .WithMany("RouteBusStops")
                         .HasForeignKey("RouteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Node");
+                    b.Navigation("BusStop");
 
                     b.Navigation("Route");
                 });
@@ -806,23 +1129,27 @@ namespace BusStation.Data.Migrations
                 {
                     b.HasOne("BusStation.Data.Models.Bus", "Bus")
                         .WithMany("Trips")
-                        .HasForeignKey("BusId");
-
-                    b.HasOne("BusStation.Data.Models.ScheduleDay", "DayOfMovement")
-                        .WithMany()
-                        .HasForeignKey("DayOfMovementId");
+                        .HasForeignKey("BusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BusStation.Data.Models.Route", "Route")
-                        .WithMany("Trips")
+                        .WithMany()
                         .HasForeignKey("RouteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BusStation.Data.Models.Schedule", "Schedule")
+                        .WithMany()
+                        .HasForeignKey("ScheduleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Bus");
 
-                    b.Navigation("DayOfMovement");
-
                     b.Navigation("Route");
+
+                    b.Navigation("Schedule");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -836,7 +1163,7 @@ namespace BusStation.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("BusStation.Data.DataTransferObjects.AdminAccount.Admin", null)
+                    b.HasOne("BusStation.Data.DataTransferObjects.Admin.Admin", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -845,7 +1172,7 @@ namespace BusStation.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("BusStation.Data.DataTransferObjects.AdminAccount.Admin", null)
+                    b.HasOne("BusStation.Data.DataTransferObjects.Admin.Admin", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -860,7 +1187,7 @@ namespace BusStation.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BusStation.Data.DataTransferObjects.AdminAccount.Admin", null)
+                    b.HasOne("BusStation.Data.DataTransferObjects.Admin.Admin", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -869,7 +1196,7 @@ namespace BusStation.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("BusStation.Data.DataTransferObjects.AdminAccount.Admin", null)
+                    b.HasOne("BusStation.Data.DataTransferObjects.Admin.Admin", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -881,16 +1208,14 @@ namespace BusStation.Data.Migrations
                     b.Navigation("Trips");
                 });
 
-            modelBuilder.Entity("BusStation.Data.Models.Node", b =>
+            modelBuilder.Entity("BusStation.Data.Models.BusStop", b =>
                 {
-                    b.Navigation("RouteNodes");
+                    b.Navigation("RouteBusStops");
                 });
 
             modelBuilder.Entity("BusStation.Data.Models.Route", b =>
                 {
-                    b.Navigation("RouteNodes");
-
-                    b.Navigation("Trips");
+                    b.Navigation("RouteBusStops");
                 });
 #pragma warning restore 612, 618
         }

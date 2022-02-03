@@ -3,9 +3,7 @@ using BusStation.Contracts;
 using BusStation.Data.DataTransferObjects.Incoming;
 using BusStation.Data.DataTransferObjects.Outgoing;
 using BusStation.Data.Models;
-using BusStation.Data.RequestFeatures;
 using BusStopStation.WebApi.ActionFilters;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,9 +25,9 @@ namespace Products.Controllers
         }
 
         [HttpGet(Name = "GetRoutes")]
-        public async Task<IActionResult> GetRoutes([FromQuery] RouteParameters routeParameters)
+        public async Task<IActionResult> GetRoutes()
         {
-            var routes = await _repository.Route.GetAllRoutesAsync(routeParameters, trackChanges: false);
+            var routes = await _repository.Route.GetAllRoutesAsync(trackChanges: false);
             if (routes.ToList().Count == 0)
             {
                 return NotFound();
@@ -41,7 +39,7 @@ namespace Products.Controllers
         }
 
         [HttpGet("{id}", Name = "GetRouteById")]
-        public async Task<IActionResult> GetRoute(int id)
+        public async Task<IActionResult> GetRouteById(int id)
         {
             var routeEntity = await _repository.Route.GetRouteByIdAsync(id, trackChanges: false);
 
@@ -52,7 +50,7 @@ namespace Products.Controllers
 
 
         [HttpPost(Name = "CreateRoute")]
-        [Authorize]
+        //[Authorize]
         [ServiceFilter(typeof(RouteValidateAttribute))]
         public async Task<IActionResult> CreateRoute([FromBody] RouteIncomingDTO route)
         {
@@ -71,11 +69,11 @@ namespace Products.Controllers
 
             var routeToReturn = _mapper.Map<RouteOutgoingDTO>(routeEntity);
 
-            return RedirectToRoute("GetRoute", new { id = routeToReturn.Id });
+            return RedirectToRoute("GetRouteById", new { id = routeToReturn.Id });
         }
 
         [HttpPut("{id}", Name = "UpdateRoute")]
-        [Authorize]
+        //[Authorize]
         [ServiceFilter(typeof(RouteValidateAttribute))]
         public async Task<IActionResult> UpdateRoute(int id, [FromBody] RouteIncomingDTO route)
         {
@@ -96,7 +94,7 @@ namespace Products.Controllers
         }
 
         [HttpDelete("{id}", Name = "DeleteRoute")]
-        [Authorize]
+        //[Authorize]
         [ServiceFilter(typeof(RouteValidateAttribute))]
         public async Task<IActionResult> DeleteRoute(int id)
         {

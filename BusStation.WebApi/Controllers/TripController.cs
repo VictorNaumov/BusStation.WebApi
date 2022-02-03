@@ -5,7 +5,6 @@ using BusStation.Data.DataTransferObjects.Outgoing;
 using BusStation.Data.Models;
 using BusStation.Data.RequestFeatures;
 using BusStopStation.WebApi.ActionFilters;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,9 +40,9 @@ namespace Products.Controllers
             return Ok(tripsDTO);
         }
 
-        [HttpGet("{id}", Name = "GetTrip")]
+        [HttpGet("{id}", Name = "GetTripById")]
         [ServiceFilter(typeof(TripValidateAttribute))]
-        public async Task<IActionResult> GetTrip(int id)
+        public async Task<IActionResult> GetTripById(int id)
         {
             var tripEntity = await _repository.Trip.GetTripByIdAsync(id, trackChanges: false);
 
@@ -53,7 +52,7 @@ namespace Products.Controllers
         }
 
         [HttpPost(Name = "CreateTrip")]
-        [Authorize]
+        //[Authorize]
         [ServiceFilter(typeof(TripValidateAttribute))]
         public async Task<IActionResult> CreateTrip([FromBody] TripIncomingDTO trip)
         {
@@ -72,11 +71,11 @@ namespace Products.Controllers
 
             var tripToReturn = _mapper.Map<TripOutgoingDTO>(tripEntity);
 
-            return RedirectToRoute("GetTrip", new { id = tripToReturn.Id });
+            return RedirectToRoute("GetTripById", new { id = tripToReturn.Id });
         }
 
         [HttpPut("{id}", Name = "UpdateTrip")]
-        [Authorize]
+        //[Authorize]
         [ServiceFilter(typeof(TripValidateAttribute))]
         public async Task<IActionResult> UpdateTrip(int id, [FromBody] TripIncomingDTO trip)
         {
@@ -97,7 +96,7 @@ namespace Products.Controllers
         }
 
         [HttpDelete("{id}", Name = "DeleteTrip")]
-        [Authorize]
+        //[Authorize]
         [ServiceFilter(typeof(TripValidateAttribute))]
         public async Task<IActionResult> DeleteTrip(int id)
         {
