@@ -41,22 +41,28 @@ export class RouteBusStopsComponent implements OnInit {
 
   ngOnInit(): void {
     this.metaData.currentPage = 1;
-    this.sendQuery();
     this.addForm = new FormGroup({
-      name: new FormControl('', [Validators.required, Validators.minLength(4)])
-    });
-
-
-    this.updateForm = new FormGroup({
       routeId: new FormControl('', [Validators.required]),
       busStopId: new FormControl('', [Validators.required]),
       minutesInWay: new FormControl('', [Validators.required]),
       waitingTime: new FormControl('', [Validators.required]),
-      order: new FormControl()
+      order: new FormControl('', [Validators.required]),
+    });
+
+
+    this.updateForm = new FormGroup({
+      oldRouteId: new FormControl('', [Validators.required]),
+      oldBusStopId: new FormControl('', [Validators.required]),
+      oldMinutesInWay: new FormControl('', [Validators.required]),
+      oldWaitingTime: new FormControl('', [Validators.required]),
+      oldOrder: new FormControl('', [Validators.required]),
     });
     this.deleteForm = new FormGroup({
-      deleteId: new FormControl()
+      routeId: new FormControl('', [Validators.required]),
+      busStopId: new FormControl('', [Validators.required]),
+      order: new FormControl()
     });
+    this.sendQuery();
   }
 
   public sendQuery(): void {

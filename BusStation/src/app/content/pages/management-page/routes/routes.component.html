@@ -3,7 +3,7 @@
     <div class="form-menu">
 
       <div class="row">
-        <h4 class="col-sm-8">Routes List</h4>
+        <h4 class="col-sm-8">Routes</h4>
         <div class="col-sm-2">
           <button type="button" class="btn btn-outline-dark" style="border-radius: 0px;" data-toggle="modal" data-target="#addModal">
             Add
@@ -19,13 +19,6 @@
         </div>
       </div>
       <hr style="background-color: dimgray; height: 1px;" />
-
-      <div class="form-group row">
-        <label class="col-sm-4 col-form-label" style="font-weight: bold">Pagination</label>
-        <div class="col-sm-8">
-          <!-- <app-pagination [metaData]="metaData" [isActive]="!isLoading" (changePage)="onPageChange($event)"></app-pagination> -->
-        </div>
-      </div>
     </div>
   </div>
 
@@ -68,11 +61,11 @@
       </div>
       <div class="modal-body">
         <form [formGroup]="addForm" (ngSubmit)="addItem()">
-          <div class="form-group" [ngClass]="{invalid: addForm.get('name')?.touched && addForm.get('name')?.invalid}">
-            <label class="col-form-label" style="font-weight: bold" for="name">Name: </label>
-            <input class="form-control" style="border-radius: 0px;" id="name" type="text" formControlName="name">
-            <div class="validation" *ngIf="addForm.get('name')?.touched && addForm.get('name')?.invalid">
-              <small *ngIf="addForm.get('name')?.errors?.required">Enter field.</small>
+          <div class="form-group" [ngClass]="{invalid: addForm.get('routeTypeId')?.touched && addForm.get('routeTypeId')?.invalid}">
+            <label class="col-form-label" style="font-weight: bold" for="routeTypeId">routeTypeId: </label>
+            <input class="form-control" style="border-radius: 0px;" id="routeTypeId" type="text" formControlName="routeTypeId">
+            <div class="validation" *ngIf="addForm.get('routeTypeId')?.touched && addForm.get('routeTypeId')?.invalid">
+              <small *ngIf="addForm.get('routeTypeId')?.errors?.required">Enter field.</small>
             </div>
           </div>
           <div class="form-group">
@@ -101,12 +94,12 @@
       </div>
       <div class="modal-body">
         <form [formGroup]="updateForm" (ngSubmit)="updateItem()">
-          <div class="form-group" [ngClass]="{invalid: updateForm.get('oldname')?.touched && updateForm.get('oldname')?.invalid}">
-            <label class="col-form-label" style="font-weight: bold" for="oldname">Name: </label>
-            <input class="form-control" style="border-radius: 0px;" id="oldname" type="text" formControlName="oldname">
-            <input class="form-control" style="border-radius: 0px;" id="updateid" type="number" hidden formControlName="updateid">
-            <div class="validation" *ngIf="updateForm.get('oldname')?.touched && updateForm.get('oldname')?.invalid">
-              <small *ngIf="updateForm.get('oldname')?.errors?.required">Enter field.</small>
+          <div class="form-group" [ngClass]="{invalid: updateForm.get('oldRouteTypeId')?.touched && updateForm.get('oldRouteTypeId')?.invalid}">
+            <label class="col-form-label" style="font-weight: bold" for="oldRouteTypeId">routeTypeId: </label>
+            <input class="form-control" style="border-radius: 0px;" id="oldRouteTypeId" type="text" formControlName="oldRouteTypeId">
+            <input class="form-control" style="border-radius: 0px;" id="updateId" type="number" hidden formControlName="updateId">
+            <div class="validation" *ngIf="updateForm.get('oldRouteTypeId')?.touched && updateForm.get('oldRouteTypeId')?.invalid">
+              <small *ngIf="updateForm.get('oldRouteTypeId')?.errors?.required">Enter field.</small>
             </div>
           </div>
           <div class="form-group">
@@ -137,7 +130,7 @@
         <form [formGroup]="deleteForm" (ngSubmit)="deleteItem()">
           <div class="form-group">
             <label class="col-form-label" style="font-weight: bold">Are You shure? </label>
-            <input class="form-control" style="border-radius: 0px;" id="deleteid" type="number" hidden formControlName="deleteid">
+            <input class="form-control" style="border-radius: 0px;" id="deleteId" type="number" hidden formControlName="deleteId">
           </div>
           <div class="form-group">
             <button type="submit" (click)="deleteItem()" class="btn btn-outline-dark" style="border-radius: 0px;" [disabled]="deleteForm?.invalid || submitted" data-dismiss="modal">Delete</button>

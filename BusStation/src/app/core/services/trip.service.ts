@@ -9,7 +9,7 @@ import { TripParameters } from "../models/utility/trip-parameters";
 
 @Injectable({ providedIn: 'root' })
 export class TripService {
-    public pathBase: string = `${connectionString}/trip`;
+    public pathBase: string = `${connectionString}/trips`;
 
     constructor(private http: HttpClient) { }
 

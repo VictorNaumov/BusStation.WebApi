@@ -7,18 +7,18 @@
         <li class="tripReport-wrapper" *ngFor="let tripReport of tripReports">
           <div class="tripReport">
             <div>
-              <h4 style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">Bus Station - {{tripReport.destination}}</h4>
+              <div *ngIf="tripReport.routeType=='Urban' || tripReport.routeType=='Suburban'">
+                <h4 style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">Bus Station - {{tripReport.destination}} ({{tripReport.routeType}})</h4>
+              </div>
+              <div *ngIf="tripReport.routeType=='Intercity'">
+                <h4 style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">Novopolotsk - {{tripReport.busStops[tripReport.busStops.length - 1].location}} ({{tripReport.routeType}})</h4>
+              </div>
               <p style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                 <b>Count of stops: </b><span>{{tripReport.departureTime | date:'shortTime' }} - {{tripReport.arrivalTime | date:'shortTime' }} </span><br>
-                <b>Route type: </b><span>{{tripReport.routeType}}</span><br>
                 <b>Schedule: </b><span>{{tripReport.schedule}}</span><br>
                 <b>Price: </b><span>{{tripReport.price.toFixed(2)}}$</span><br>
-                <b>Departure location: </b><span>Novopolotsk</span><br>
-                <b>Arrival location: </b><span>{{tripReport.busStops[tripReport.busStops.length - 1].location}}</span><br>
               </p>
-
             </div>
-
           </div>
         </li>
   </div>

@@ -41,11 +41,12 @@ export class BusStopsComponent implements OnInit {
   ngOnInit(): void {
     this.metaData.currentPage = 1;
     this.addForm = new FormGroup({
-      name: new FormControl('', [Validators.required, Validators.minLength(4)])
+      name: new FormControl('', [Validators.required, Validators.minLength(4)]),
+      location: new FormControl('', [Validators.required, Validators.minLength(4)])
     });
     this.updateForm = new FormGroup({
-      name: new FormControl('', [Validators.required, Validators.minLength(4)]),
-      location: new FormControl('', [Validators.required, Validators.minLength(4)]),
+      oldName: new FormControl('', [Validators.required, Validators.minLength(4)]),
+      oldLocation: new FormControl('', [Validators.required, Validators.minLength(4)]),
       updateId: new FormControl()
     });
     this.deleteForm = new FormGroup({

@@ -20,7 +20,7 @@ export class TripsComponent implements OnInit {
 
   public submitted = false;
   public message: string = '';
-  public isLoading: boolean = false;
+  public isLoading: boolean = true;
 
   public metaData: Pagination = {
     totalPages: 0,
@@ -41,22 +41,21 @@ export class TripsComponent implements OnInit {
 
   ngOnInit(): void {
     this.metaData.currentPage = 1;
-    this.sendQuery();
     this.addForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.minLength(4)])
     });
 
-
     this.updateForm = new FormGroup({
-      routeId: new FormControl('', [Validators.required]),
-      busStopId: new FormControl('', [Validators.required]),
-      minutesInWay: new FormControl('', [Validators.required]),
-      waitingTime: new FormControl('', [Validators.required]),
-      order: new FormControl()
+      oldBusId: new FormControl('', [Validators.required]),
+      oldRouteId: new FormControl('', [Validators.required]),
+      oldScheduleId: new FormControl('', [Validators.required]),
+      oldDepartureTime: new FormControl('', [Validators.required]),
+      updateId: new FormControl('', [Validators.required]),
     });
     this.deleteForm = new FormGroup({
       deleteId: new FormControl()
     });
+    this.sendQuery();
   }
 
   public sendQuery(): void {
@@ -76,11 +75,6 @@ export class TripsComponent implements OnInit {
     this.params.searchTerm = (<HTMLInputElement>document.getElementById('search')).value;
     this.onPageChange();
   }
-
-  busId: number;
-  routeId: number;
-  scheduleId: number;
-  departureTime: Date;
 
   public putDataToUpdate(id: number, trip: TripIncomingDTO): void {
     this.updateForm.controls['oldBusId'].setValue(trip.busId);
@@ -122,8 +116,8 @@ export class TripsComponent implements OnInit {
     this.submitted = true;
 
     const trip: TripOutgoingDTO = {
-      routeId: this.updateForm.value.routeId,
       busId: this.updateForm.value.busId,
+      routeId: this.updateForm.value.routeId,
       scheduleId: this.updateForm.value.scheduleId,
       departureTime: this.updateForm.value.departureTime,
     };

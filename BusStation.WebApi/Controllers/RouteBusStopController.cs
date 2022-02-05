@@ -37,10 +37,10 @@ namespace Products.Controllers
             return Ok(routeBusStopDto);
         }
 
-        [HttpGet("{routeId}/{busStopId}", Name = "GetRouteBusStopByIds")]
-        public async Task<IActionResult> GetRouteBusStopByIds(int routeId, int busStopId)
+        [HttpGet("{routeId}/{routeBusStopId}/{order}", Name = "GetRouteBusStopByIds")]
+        public async Task<IActionResult> GetRouteBusStopByIds(int routeId, int busStopId, int order)
         {
-            var routeBusStopEntity = await _repository.RouteBusStop.GetRouteBusStopByIdsAsync(routeId, busStopId, trackChanges: false);
+            var routeBusStopEntity = await _repository.RouteBusStop.GetRouteBusStopByIdsAsync(routeId, busStopId, order, trackChanges: false);
 
             var routeBusStopDto = _mapper.Map<IEnumerable<RouteBusStopOutgoingDTO>>(routeBusStopEntity);
 
@@ -90,11 +90,11 @@ namespace Products.Controllers
             return Ok(routeBusStopToReturn);
         }
 
-        [HttpDelete("{routeId}/{routeBusStopId}", Name = "DeleteRouteBusStop")]
+        [HttpDelete("{routeId}/{routeBusStopId}/{order}", Name = "DeleteRouteBusStop")]
         //[Authorize]
-        public async Task<IActionResult> DeleteRouteBusStop(int routeId, int routeBusStopId)
+        public async Task<IActionResult> DeleteRouteBusStop(int routeId, int busStopId, int order)
         {
-            var routeBusStopEntity = await _repository.RouteBusStop.GetRouteBusStopByIdsAsync(routeId, routeBusStopId, trackChanges: false);
+            var routeBusStopEntity = await _repository.RouteBusStop.GetRouteBusStopByIdsAsync(routeId, busStopId, order, trackChanges: false);
 
             _repository.RouteBusStop.DeleteRouteBusStop(routeBusStopEntity);
 

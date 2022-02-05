@@ -6,7 +6,6 @@ import { PagesComponent } from "./pages.component";
 import { SignInPageComponent } from "./sign-in-page/sign-in-page.component";
 import { ManagementPageComponent } from "./management-page/management-page.component";
 import { HomePageComponent } from "./home-page/home-page.component";
-import { AboutPageComponent } from "./about-page/about-page.component";
 import { SignUpPageComponent } from "./sign-up-page/sign-up-page.component";
 import { TripReportPageComponent } from "./trip-report-page/trip-report-page.component";
 import { BusesComponent } from "./management-page/buses/buses.component";
@@ -21,7 +20,6 @@ const routes: Routes = [
     component: PagesComponent,
     children: [
       { path: "", component: HomePageComponent },
-      { path: "about", component: AboutPageComponent },
       { path: "signin", component: SignInPageComponent },
       { path: "signup", component: SignUpPageComponent },
       { path: "reports", component: TripReportPageComponent },

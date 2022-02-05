@@ -3,7 +3,7 @@
     <div class="form-menu">
 
       <div class="row">
-        <h4 class="col-sm-8">Routes List</h4>
+        <h4 class="col-sm-8">Route bus stops</h4>
         <div class="col-sm-2">
           <button type="button" class="btn btn-outline-dark" style="border-radius: 0px;" data-toggle="modal" data-target="#addModal">
             Add
@@ -19,13 +19,6 @@
         </div>
       </div>
       <hr style="background-color: dimgray; height: 1px;" />
-
-      <div class="form-group row">
-        <label class="col-sm-4 col-form-label" style="font-weight: bold">Pagination</label>
-        <div class="col-sm-8">
-          <!-- <app-pagination [metaData]="metaData" [isActive]="!isLoading" (changePage)="onPageChange($event)"></app-pagination> -->
-        </div>
-      </div>
     </div>
   </div>
 
@@ -40,13 +33,13 @@
             <b>Bus stop id: </b><span>{{routeBusStop.busStopId}}</span>
           </div>
           <div class="col-sm">
+            <b>Order: </b><span>{{routeBusStop.order}}</span>
+          </div>
+          <div class="col-sm">
             <b>Minutes in way: </b><span>{{routeBusStop.minutesInWay}}</span>
           </div>
           <div class="col-sm">
             <b>Waiting time: </b><span>{{routeBusStop.waitingTime}}</span>
-          </div>
-          <div class="col-sm">
-            <b>Order: </b><span>{{routeBusStop.order}}</span>
           </div>
           <div style="padding-right: 10px;" class="col-sm">
             <span >
@@ -77,11 +70,11 @@
       </div>
       <div class="modal-body">
         <form [formGroup]="addForm" (ngSubmit)="addItem()">
-          <div class="form-group" [ngClass]="{invalid: addForm.get('name')?.touched && addForm.get('name')?.invalid}">
-            <label class="col-form-label" style="font-weight: bold" for="name">Name: </label>
-            <input class="form-control" style="border-radius: 0px;" id="name" type="text" formControlName="name">
-            <div class="validation" *ngIf="addForm.get('name')?.touched && addForm.get('name')?.invalid">
-              <small *ngIf="addForm.get('name')?.errors?.required">Enter field.</small>
+          <div class="form-group" [ngClass]="{invalid: addForm.get('routeId')?.touched && addForm.get('routeId')?.invalid}">
+            <label class="col-form-label" style="font-weight: bold" for="routeId">routeId: </label>
+            <input class="form-control" style="border-radius: 0px;" id="routeId" type="text" formControlName="routeId">
+            <div class="validation" *ngIf="addForm.get('routeId')?.touched && addForm.get('routeId')?.invalid">
+              <small *ngIf="addForm.get('routeId')?.errors?.required">Enter field.</small>
             </div>
           </div>
           <div class="form-group">
@@ -110,12 +103,12 @@
       </div>
       <div class="modal-body">
         <form [formGroup]="updateForm" (ngSubmit)="updateItem()">
-          <div class="form-group" [ngClass]="{invalid: updateForm.get('oldname')?.touched && updateForm.get('oldname')?.invalid}">
-            <label class="col-form-label" style="font-weight: bold" for="oldname">Name: </label>
-            <input class="form-control" style="border-radius: 0px;" id="oldname" type="text" formControlName="oldname">
+          <div class="form-group" [ngClass]="{invalid: updateForm.get('oldRouteId')?.touched && updateForm.get('oldRouteId')?.invalid}">
+            <label class="col-form-label" style="font-weight: bold" for="oldRouteId">routeId: </label>
+            <input class="form-control" style="border-radius: 0px;" id="oldRouteId" type="text" formControlName="oldRouteId">
             <input class="form-control" style="border-radius: 0px;" id="updateid" type="number" hidden formControlName="updateid">
-            <div class="validation" *ngIf="updateForm.get('oldname')?.touched && updateForm.get('oldname')?.invalid">
-              <small *ngIf="updateForm.get('oldname')?.errors?.required">Enter field.</small>
+            <div class="validation" *ngIf="updateForm.get('oldRouteId')?.touched && updateForm.get('oldRouteId')?.invalid">
+              <small *ngIf="updateForm.get('oldRouteId')?.errors?.required">Enter field.</small>
             </div>
           </div>
           <div class="form-group">

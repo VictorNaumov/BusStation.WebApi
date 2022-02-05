@@ -3,7 +3,7 @@
     <div class="form-menu">
 
       <div class="row">
-        <h4 class="col-sm-8">Trips List</h4>
+        <h4 class="col-sm-8">Trips</h4>
         <div class="col-sm-2">
           <button type="button" class="btn btn-outline-dark" style="border-radius: 0px;" data-toggle="modal" data-target="#addModal">
             Add
@@ -19,13 +19,6 @@
         </div>
       </div>
       <hr style="background-color: dimgray; height: 1px;" />
-
-      <div class="form-group row">
-        <label class="col-sm-4 col-form-label" style="font-weight: bold">Pagination</label>
-        <div class="col-sm-8">
-          <!-- <app-pagination [metaData]="metaData" [isActive]="!isLoading" (changePage)="onPageChange($event)"></app-pagination> -->
-        </div>
-      </div>
     </div>
   </div>
 
@@ -33,13 +26,16 @@
     <div *ngFor="let trip of trips">
       <div class="item-container" >
         <div class="row">
-          <div class="col-sm-2">
+          <div class="col-sm-1">
             <b>Id: </b><span>{{trip.id}}</span>
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-2">
             <b>Route id: </b><span>{{trip.routeId}}</span>
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-2">
+            <b>Bus id: </b><span>{{trip.busId}}</span>
+          </div>
+          <div class="col-sm-2">
             <b>Schedule id: </b><span>{{trip.scheduleId}}</span>
           </div>
           <div class="col-sm-4">
@@ -74,11 +70,11 @@
       </div>
       <div class="modal-body">
         <form [formGroup]="addForm" (ngSubmit)="addItem()">
-          <div class="form-group" [ngClass]="{invalid: addForm.get('name')?.touched && addForm.get('name')?.invalid}">
-            <label class="col-form-label" style="font-weight: bold" for="name">Name: </label>
-            <input class="form-control" style="border-radius: 0px;" id="name" type="text" formControlName="name">
-            <div class="validation" *ngIf="addForm.get('name')?.touched && addForm.get('name')?.invalid">
-              <small *ngIf="addForm.get('name')?.errors?.required">Enter field.</small>
+          <div class="form-group" [ngClass]="{invalid: addForm.get('RouteId')?.touched && addForm.get('RouteId')?.invalid}">
+            <label class="col-form-label" style="font-weight: bold" for="RouteId">RouteId: </label>
+            <input class="form-control" style="border-radius: 0px;" id="RouteId" type="text" formControlName="RouteId">
+            <div class="validation" *ngIf="addForm.get('RouteId')?.touched && addForm.get('RouteId')?.invalid">
+              <small *ngIf="addForm.get('RouteId')?.errors?.required">Enter field.</small>
             </div>
           </div>
           <div class="form-group">
@@ -107,12 +103,12 @@
       </div>
       <div class="modal-body">
         <form [formGroup]="updateForm" (ngSubmit)="updateItem()">
-          <div class="form-group" [ngClass]="{invalid: updateForm.get('oldname')?.touched && updateForm.get('oldname')?.invalid}">
-            <label class="col-form-label" style="font-weight: bold" for="oldname">Name: </label>
-            <input class="form-control" style="border-radius: 0px;" id="oldname" type="text" formControlName="oldname">
-            <input class="form-control" style="border-radius: 0px;" id="updateid" type="number" hidden formControlName="updateid">
-            <div class="validation" *ngIf="updateForm.get('oldname')?.touched && updateForm.get('oldname')?.invalid">
-              <small *ngIf="updateForm.get('oldname')?.errors?.required">Enter field.</small>
+          <div class="form-group" [ngClass]="{invalid: updateForm.get('oldRouteId')?.touched && updateForm.get('oldRouteId')?.invalid}">
+            <label class="col-form-label" style="font-weight: bold" for="oldRouteId">RouteId: </label>
+            <input class="form-control" style="border-radius: 0px;" id="oldRouteId" type="text" formControlName="oldRouteId">
+            <input class="form-control" style="border-radius: 0px;" id="updateId" type="number" hidden formControlName="updateId">
+            <div class="validation" *ngIf="updateForm.get('oldRouteId')?.touched && updateForm.get('oldRouteId')?.invalid">
+              <small *ngIf="updateForm.get('oldRouteId')?.errors?.required">Enter field.</small>
             </div>
           </div>
           <div class="form-group">
@@ -143,7 +139,7 @@
         <form [formGroup]="deleteForm" (ngSubmit)="deleteItem()">
           <div class="form-group">
             <label class="col-form-label" style="font-weight: bold">Are You shure? </label>
-            <input class="form-control" style="border-radius: 0px;" id="deleteid" type="number" hidden formControlName="deleteid">
+            <input class="form-control" style="border-radius: 0px;" id="deleteId" type="number" hidden formControlName="deleteId">
           </div>
           <div class="form-group">
             <button type="submit" (click)="deleteItem()" class="btn btn-outline-dark" style="border-radius: 0px;" [disabled]="deleteForm?.invalid || submitted" data-dismiss="modal">Delete</button>

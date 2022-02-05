@@ -22,8 +22,8 @@ namespace BusStation.Core.Repositories
             return routeBusStops;
         }
 
-        public async Task<RouteBusStop> GetRouteBusStopByIdsAsync(int routeId, int busStopId, bool trackChanges) =>
-            await FindByCondition(c => c.RouteId.Equals(routeId) && c.BusStopId.Equals(busStopId), trackChanges)
+        public async Task<RouteBusStop> GetRouteBusStopByIdsAsync(int routeId, int busStopId, int order, bool trackChanges) =>
+            await FindByCondition(c => c.RouteId.Equals(routeId) && c.BusStopId.Equals(busStopId) && c.Order.Equals(order), trackChanges)
             .IncludeDependencies()
             .SingleOrDefaultAsync();
 

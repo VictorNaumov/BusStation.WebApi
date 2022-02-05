@@ -18,30 +18,29 @@ export class RoutesComponent implements OnInit {
 
   public submitted = false;
   public message: string = '';
-  public isLoading: boolean = false;
+  public isLoading: boolean = true;
 
   constructor(
     private routeService: RouteService) { }
 
   ngOnInit(): void {
-    this.sendQuery();
     this.addForm = new FormGroup({
-      routeTypeId: new FormControl('', [Validators.required, Validators.minLength(4)])
+      routeTypeId: new FormControl('', [Validators.required])
     });
     this.updateForm = new FormGroup({
-      routeTypeId: new FormControl('', [Validators.required, Validators.minLength(4)]),
+      oldRouteTypeId: new FormControl('', [Validators.required]),
+      updateId: new FormControl('', [Validators.required]),
     });
     this.deleteForm = new FormGroup({
       deleteId: new FormControl()
     });
+    this.sendQuery();
   }
 
   public sendQuery(): void {
     this.isLoading = true;
     this.routeService.GetAllRoutes().subscribe(data => {
       this.buses = data;
-      console.log(this.buses)
-      //this.metaData = JSON.parse(data.headers.get('pagination'));
       this.isLoading = false;
     });
   }
@@ -56,11 +55,11 @@ export class RoutesComponent implements OnInit {
 
   public putDataToUpdate(id: number, bus: RouteOutgoingDTO): void {
     this.updateForm.controls['oldRouteTypeId'].setValue(bus.routeTypeId);
-    this.updateForm.controls['updateid'].setValue(id);
+    this.updateForm.controls['updateId'].setValue(id);
   }
 
   public putDataToDelete(id: number): void {
-    this.deleteForm.controls['deleteid'].setValue(id);
+    this.deleteForm.controls['deleteId'].setValue(id);
   }
 
   public updateItem(): void {

@@ -15,8 +15,8 @@ export class RouteBusStopService {
         return this.http.get<RouteBusStopIncomingDTO[]>(this.pathBase);
     }
 
-    public GetRouteBusStopById(id: number): Observable<RouteBusStopIncomingDTO> {
-        return this.http.get<RouteBusStopIncomingDTO>(`${this.pathBase}/${id}`);
+    public GetRouteBusStopById(routeId: number, busStopId: number, order: number): Observable<RouteBusStopIncomingDTO> {
+        return this.http.get<RouteBusStopIncomingDTO>(`${this.pathBase}/${routeId}`);
     }
 
     public CreateRouteBusStop(routeBusStop: RouteBusStopOutgoingDTO): Observable<RouteBusStopIncomingDTO> {

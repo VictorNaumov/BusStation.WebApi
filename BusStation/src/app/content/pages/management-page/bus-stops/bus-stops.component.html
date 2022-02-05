@@ -3,7 +3,7 @@
     <div class="form-menu">
 
       <div class="row">
-        <h4 class="col-sm-8">Bus stops List</h4>
+        <h4 class="col-sm-8">Bus stops</h4>
         <div class="col-sm-2">
           <button type="button" class="btn btn-outline-dark" style="border-radius: 0px;" data-toggle="modal" data-target="#addModal">
             Add
@@ -19,13 +19,6 @@
         </div>
       </div>
       <hr style="background-color: dimgray; height: 1px;" />
-
-      <div class="form-group row">
-        <label class="col-sm-4 col-form-label" style="font-weight: bold">Pagination</label>
-        <div class="col-sm-8">
-          <!-- <app-pagination [metaData]="metaData" [isActive]="!isLoading" (changePage)="onPageChange($event)"></app-pagination> -->
-        </div>
-      </div>
     </div>
   </div>
 
@@ -43,7 +36,7 @@
             <b>Location: </b><span>{{busStop.location}}</span>
           </div>
           <div class="col-sm-2" style="padding-right: 10px;" >
-            <span >
+            <span>
               <button (click)="putDataToUpdate(busStop.id, busStop)" type="button" class="btn btn-outline-dark" style="border-radius: 0px;" data-toggle="modal" data-target="#updateModal">
                 Update
               </button>

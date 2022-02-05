@@ -20,16 +20,7 @@ export class BusesComponent implements OnInit {
 
   public submitted = false;
   public message: string = '';
-  public isLoading: boolean = false;
-
-  public metaData: Pagination = {
-    totalPages: 0,
-    totalCount: 0,
-    pageSize: 0,
-    hasNext: false,
-    hasPrevious: false,
-    currentPage: 1
-  };
+  public isLoading: boolean = true;
 
   public params: BusParameters = {
     searchTerm: '',
@@ -40,16 +31,18 @@ export class BusesComponent implements OnInit {
     private busService: BusService) { }
 
   ngOnInit(): void {
-    this.metaData.currentPage = 1;
     this.sendQuery();
     this.addForm = new FormGroup({
-      name: new FormControl('', [Validators.required, Validators.minLength(4)])
+      name: new FormControl('', [Validators.required]),
+      countOfSeats: new FormControl('', [Validators.required]),
+      driver: new FormControl('', [Validators.required]),
+      number: new FormControl('', [Validators.required]),
     });
     this.updateForm = new FormGroup({
-      name: new FormControl('', [Validators.required, Validators.minLength(4)]),
-      countOfSeats: new FormControl('', [Validators.required, Validators.minLength(4)]),
-      driver: new FormControl('', [Validators.required, Validators.minLength(4)]),
-      number: new FormControl('', [Validators.required, Validators.minLength(4)]),
+      oldName: new FormControl('', [Validators.required]),
+      oldCountOfSeats: new FormControl('', [Validators.required]),
+      oldDriver: new FormControl('', [Validators.required]),
+      oldNumber: new FormControl('', [Validators.required]),
       updateId: new FormControl()
     });
     this.deleteForm = new FormGroup({
@@ -61,8 +54,6 @@ export class BusesComponent implements OnInit {
     this.isLoading = true;
     this.busService.GetAllBuses(this.params).subscribe(data => {
       this.buses = data;
-      console.log(this.buses)
-      //this.metaData = JSON.parse(data.headers.get('pagination'));
       this.isLoading = false;
     });
   }
@@ -78,12 +69,15 @@ export class BusesComponent implements OnInit {
   }
 
   public putDataToUpdate(id: number, bus: BusOutgoingDTO): void {
-    this.updateForm.controls['oldname'].setValue(bus.name);
-    this.updateForm.controls['updateid'].setValue(id);
+    this.updateForm.controls['oldName'].setValue(bus.name);
+    this.updateForm.controls['oldNumber'].setValue(bus.name);
+    this.updateForm.controls['oldDriver'].setValue(bus.name);
+    this.updateForm.controls['oldCountOfSeats'].setValue(bus.name);
+    this.updateForm.controls['updateId'].setValue(id);
   }
 
   public putDataToDelete(id: number): void {
-    this.deleteForm.controls['deleteid'].setValue(id);
+    this.deleteForm.controls['deleteId'].setValue(id);
   }
 
   public updateItem(): void {
@@ -92,10 +86,10 @@ export class BusesComponent implements OnInit {
     this.submitted = true;
 
     const bus: BusOutgoingDTO = {
-      name: this.updateForm.value.name,
-      number: this.updateForm.value.number,
-      driver: this.updateForm.value.driver,
-      countOfSeats: this.updateForm.value.countOfSeats,
+      name: this.updateForm.value.oldName,
+      number: this.updateForm.value.oldNumber,
+      driver: this.updateForm.value.oldDriver,
+      countOfSeats: this.updateForm.value.oldCountOfSeats,
     };
     this.busService.UpdateBus(this.updateForm.value.id, bus).subscribe();
   }

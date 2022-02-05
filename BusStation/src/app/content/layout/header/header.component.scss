@@ -8,9 +8,13 @@ nav {
   height: 75px;
 
   .logo {
-    height: 75px;
-    width: 75px;
+    transition: transform .4s ease-out;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
   }
+    .logo:hover {
+      transform: scale(1.10);
+      box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+    }
 
   .collapse {
     display: flex;
