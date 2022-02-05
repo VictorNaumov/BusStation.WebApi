@@ -1,10 +1,13 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, Subject } from "rxjs";
-import { tap } from "rxjs/operators";
+import { Observable, Subject, throwError } from "rxjs";
+import { catchError, tap } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { connectionString } from "src/app/shared/constants/connection.constants";
 import { AdminValidationDTO } from "../models/admin/admin-validation-dto";
+import { AdminRegistrationDTO } from "../models/admin/admin-registration-dto";
+import { getUrl } from "src/app/shared/functions/getUrl";
+import { AdminRegistrationParameters } from "../models/utility/admin-registration-parameters";
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -24,12 +27,18 @@ export class AuthService {
         }
         return localStorage.getItem('fb-token');
     }
+    public login(user: AdminValidationDTO): Observable<any> {
+      return this.http.post(`${this.pathBase}authenticate`, user).pipe(
+        tap((result: any) => this.setToken(result)),
+        catchError(this.handleError.bind(this))
+      );
+    }
 
-    login(authAccount: AdminValidationDTO): Observable<any> {
-        return this.http.post(`${this.pathBase}/login`, authAccount)
-            .pipe(
-                tap((token: any) => this.setToken(token))
-            );
+    public signup(user: AdminRegistrationDTO, parameters: AdminRegistrationParameters): Observable<any> {
+      return this.http.post(getUrl(`${this.pathBase}register`, parameters) , user).pipe(
+        tap((result: any) => this.setToken(result)),
+        catchError(this.handleError.bind(this))
+      );
     }
 
     logout() {
@@ -49,5 +58,21 @@ export class AuthService {
         } else {
             localStorage.clear();
         }
+    }
+
+    private handleError(error: HttpErrorResponse): Observable<never> {
+      const {message} = error.error;
+      switch (message) {
+        case 'INVALID_EMAIL':
+          this.error$.next('Wrong email');
+          break;
+        case 'INVALID_PASSWORD':
+          this.error$.next('Wrong password');
+          break;
+        case 'EMAIL_NOT_FOUND':
+          this.error$.next('Nonexistent email');
+          break;
+      }
+      return throwError(error);
     }
 }

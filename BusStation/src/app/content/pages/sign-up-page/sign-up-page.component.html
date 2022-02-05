@@ -1,1 +1,58 @@
-<p>sign-up-page works!</p>
+<div class="account-form">
+  <h3>Sign up</h3>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+
+    <div class="alert alert-danger" *ngIf="authService?.error$ | async as error">{{ error }}</div>
+    <div class="alert alert-info" *ngIf="message">{{ message }}</div>
+
+    <div class="form-group" [ngClass]="{invalid: form.get('email')?.touched && form.get('email')?.invalid}">
+      <label class="col-form-label" style="font-weight: bold" for="email">Email: </label>
+      <input class="form-control" style="border-radius: 0px;" id="email" type="email" formControlName="email">
+      <div class="validation" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
+        <small *ngIf="form.get('email')?.errors?.required">Enter email field.</small>
+        <small *ngIf="form.get('email')?.errors?.email">Invalid email.</small>
+      </div>
+    </div>
+
+    <div class="form-group" [ngClass]="{invalid: form.get('login')?.touched && form.get('login')?.invalid}">
+      <label class="col-form-label" style="font-weight: bold" for="login">User Name: </label>
+      <input class="form-control" style="border-radius: 0px;" id="login" type="text" formControlName="login">
+      <div class="validation" *ngIf="form.get('login')?.touched && form.get('login')?.invalid">
+        <small *ngIf="form.get('login')?.errors?.required">Enter user name field.</small>
+      </div>
+    </div>
+
+    <div class="form-group" [ngClass]="{invalid: form.get('password')?.touched && form.get('password')?.invalid}">
+      <label class="col-form-label" style="font-weight: bold" for="password">Password: </label>
+      <input class="form-control" style="border-radius: 0px;" id="password" type="password" formControlName="password">
+      <div class="validation" *ngIf="form.get('password')?.touched && form.get('password')?.invalid">
+        <small *ngIf="form.get('password')?.errors?.required">Enter password.</small>
+        <small *ngIf="form.get('password')?.errors?.minlength">
+          Password length must not be less than {{form.get('password')?.errors?.minlength.requiredLength}}.
+          Actual length is {{form.get('password')?.errors?.minlength.actualLength}}.
+        </small>
+      </div>
+    </div>
+
+    <div class="form-group" [ngClass]="{invalid: form.get('confirmpassword')?.touched && form.get('confirmpassword')?.invalid}">
+      <label class="col-form-label" style="font-weight: bold" for="confirmpassword">Confirm Password: </label>
+      <input class="form-control" style="border-radius: 0px;" id="confirmpassword" type="password" formControlName="confirmpassword">
+      <div class="validation" *ngIf="form.get('confirmpassword')?.touched && form.get('confirmpassword')?.invalid">
+        <small *ngIf="form.get('confirmpassword')?.errors?.required">Confirm password.</small>
+      </div>
+    </div>
+
+    <div class="form-group" [ngClass]="{invalid: form.get('secretKey')?.touched && form.get('secretKey')?.invalid}">
+      <label class="col-form-label" style="font-weight: bold" for="secretKey">Secret key: </label>
+      <input class="form-control" style="border-radius: 0px;" id="secretKey" type="password" formControlName="secretKey">
+      <div class="validation" *ngIf="form.get('secretKey')?.touched && form.get('secretKey')?.invalid">
+        <small *ngIf="form.get('secretKey')?.errors?.required">Secret key.</small>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-block btn-outline-dark" style="margin-top: 10px; border-radius: 0px;" [disabled]="form?.invalid || submitted">Sign up</button>
+    </div>
+    <a class="text-dark" [routerLink]="['/signin']">Sign in</a>
+  </form>
+</div>

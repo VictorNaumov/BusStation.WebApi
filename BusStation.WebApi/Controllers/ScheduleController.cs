@@ -23,9 +23,9 @@ namespace Products.Controllers
         }
 
         [HttpGet(Name = "GetAllSchedules")]
-        public async Task<IActionResult> GetDayes()
+        public async Task<IActionResult> GetAllSchedules()
         {
-            var dayes = await _repository.Schedule.GetAllSchedules(trackChanges: false);
+            var dayes = await _repository.Schedule.GetAllSchedulesAsync(trackChanges: false);
             if (dayes.ToList().Count == 0)
             {
                 return NotFound();
