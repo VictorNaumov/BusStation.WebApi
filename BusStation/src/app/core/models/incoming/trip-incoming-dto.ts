@@ -4,5 +4,5 @@ export interface TripIncomingDTO {
   routeId: number;
   busId: number;
   scheduleId: number;
-  departuteTime: Date;
+  departureTime: Date;
 }

@@ -1,8 +1,9 @@
 .nav-panel-container {
-  width: 160px;
-  height: 140px;
+  left: 200px;
+  top: 100px;
+  position: fixed;
   border: 1px solid dimgray;
-  float: right;
+  float: left;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
   text-align: center;
 }

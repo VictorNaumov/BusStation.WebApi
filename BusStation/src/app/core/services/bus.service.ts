@@ -9,7 +9,7 @@ import { BusParameters } from "../models/utility/bus-parameters";
 
 @Injectable({ providedIn: 'root' })
 export class BusService {
-    public pathBase: string = `${connectionString}/bus`;
+    public pathBase: string = `${connectionString}/buses`;
 
     constructor(private http: HttpClient) { }
 

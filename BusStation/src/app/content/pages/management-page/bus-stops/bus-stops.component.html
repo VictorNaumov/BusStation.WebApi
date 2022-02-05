@@ -3,7 +3,7 @@
     <div class="form-menu">
 
       <div class="row">
-        <h4 class="col-sm-8">Buses List</h4>
+        <h4 class="col-sm-8">Bus stops List</h4>
         <div class="col-sm-2">
           <button type="button" class="btn btn-outline-dark" style="border-radius: 0px;" data-toggle="modal" data-target="#addModal">
             Add
@@ -30,30 +30,24 @@
   </div>
 
   <div class="items-container">
-    <div *ngFor="let bus of buses">
+    <div *ngFor="let busStop of busStops">
       <div class="item-container" >
         <div class="row">
-          <div class="col-sm">
-            <b>Id: </b><span>{{bus.id}}</span>
+          <div class="col-sm-2">
+            <b>Id: </b><span>{{busStop.id}}</span>
           </div>
-          <div class="col-sm">
-            <b>Name: </b><span>{{bus.name}}</span>
+          <div class="col-sm-4">
+            <b>Name: </b><span>{{busStop.name}}</span>
           </div>
-          <div class="col-sm">
-            <b>Number: </b><span>{{bus.number}}</span>
+          <div class="col-sm-4">
+            <b>Location: </b><span>{{busStop.location}}</span>
           </div>
-          <div class="col-sm">
-            <b>Count of seats: </b><span>{{bus.countOfSeats}}</span>
-          </div>
-          <div class="col-sm">
-            <b>Driver: </b><span>{{bus.driver}}</span>
-          </div>
-          <div style="padding-right: 10px;" class="col-sm">
+          <div class="col-sm-2" style="padding-right: 10px;" >
             <span >
-              <button (click)="putDataToUpdate(bus.id, bus)" type="button" class="btn btn-outline-dark" style="border-radius: 0px;" data-toggle="modal" data-target="#updateModal">
+              <button (click)="putDataToUpdate(busStop.id, busStop)" type="button" class="btn btn-outline-dark" style="border-radius: 0px;" data-toggle="modal" data-target="#updateModal">
                 Update
               </button>
-              <button (click)="putDataToDelete(bus.id)" type="button" class="btn btn-outline-dark" style="border-radius: 0px;" data-toggle="modal" data-target="#deleteModal">
+              <button (click)="putDataToDelete(busStop.id)" type="button" class="btn btn-outline-dark" style="border-radius: 0px;" data-toggle="modal" data-target="#deleteModal">
                 Delete
               </button>
             </span>
@@ -90,10 +84,10 @@
           </div>
         </form>
       </div>
-      <div class="modal-footer">
+      <!-- <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>
@@ -110,12 +104,12 @@
       </div>
       <div class="modal-body">
         <form [formGroup]="updateForm" (ngSubmit)="updateItem()">
-          <div class="form-group" [ngClass]="{invalid: updateForm.get('oldname')?.touched && updateForm.get('oldname')?.invalid}">
-            <label class="col-form-label" style="font-weight: bold" for="oldname">Name: </label>
-            <input class="form-control" style="border-radius: 0px;" id="oldname" type="text" formControlName="oldname">
-            <input class="form-control" style="border-radius: 0px;" id="updateid" type="number" hidden formControlName="updateid">
-            <div class="validation" *ngIf="updateForm.get('oldname')?.touched && updateForm.get('oldname')?.invalid">
-              <small *ngIf="updateForm.get('oldname')?.errors?.required">Enter field.</small>
+          <div class="form-group" [ngClass]="{invalid: updateForm.get('oldName')?.touched && updateForm.get('oldName')?.invalid}">
+            <label class="col-form-label" style="font-weight: bold" for="oldName">Name: </label>
+            <input class="form-control" style="border-radius: 0px;" id="oldName" type="text" formControlName="oldName">
+            <input class="form-control" style="border-radius: 0px;" id="updateid" type="number" hidden formControlName="updateId">
+            <div class="validation" *ngIf="updateForm.get('oldName')?.touched && updateForm.get('oldName')?.invalid">
+              <small *ngIf="updateForm.get('oldName')?.errors?.required">Enter field.</small>
             </div>
           </div>
           <div class="form-group">
@@ -146,7 +140,7 @@
         <form [formGroup]="deleteForm" (ngSubmit)="deleteItem()">
           <div class="form-group">
             <label class="col-form-label" style="font-weight: bold">Are You shure? </label>
-            <input class="form-control" style="border-radius: 0px;" id="deleteid" type="number" hidden formControlName="deleteid">
+            <input class="form-control" style="border-radius: 0px;" id="deleteId" type="number" hidden formControlName="deleteid">
           </div>
           <div class="form-group">
             <button type="submit" (click)="deleteItem()" class="btn btn-outline-dark" style="border-radius: 0px;" [disabled]="deleteForm?.invalid || submitted" data-dismiss="modal">Delete</button>

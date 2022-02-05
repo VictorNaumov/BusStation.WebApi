@@ -34,7 +34,6 @@ export class BusesComponent implements OnInit {
   public params: BusParameters = {
     searchTerm: '',
     pageNumber: 1,
-    pageSize: 4
   }
 
   constructor(
@@ -62,6 +61,7 @@ export class BusesComponent implements OnInit {
     this.isLoading = true;
     this.busService.GetAllBuses(this.params).subscribe(data => {
       this.buses = data;
+      console.log(this.buses)
       //this.metaData = JSON.parse(data.headers.get('pagination'));
       this.isLoading = false;
     });

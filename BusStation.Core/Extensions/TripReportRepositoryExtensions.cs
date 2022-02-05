@@ -25,7 +25,7 @@ namespace BusStation.Core.Repositories.Extensions
             return tripReports.OrderBy(orderQuery);
         }
 
-        public static IQueryable<TripReport> FilterByDate(this IQueryable<TripReport> tripReports,
+        public  static IQueryable<TripReport> FilterByDate(this IQueryable<TripReport> tripReports,
              TripReportParameters tripReportParameters)
         {
             if (tripReportParameters.Date == DateTime.MinValue)
@@ -38,8 +38,8 @@ namespace BusStation.Core.Repositories.Extensions
             var isWeekendDay = DayOfWeek.Sunday == dayOfWeek || DayOfWeek.Saturday == dayOfWeek;
 
             tripReports = tripReports.Where(tr => tr.ScheduleId == (int)ScheduleEnum.Everyday
-             || isEvenDay ? tr.ScheduleId == (int)ScheduleEnum.EvenDays : tr.ScheduleId == (int)ScheduleEnum.OddDays
-             || isWeekendDay ? tr.ScheduleId == (int)ScheduleEnum.Weekend : tr.ScheduleId == (int)ScheduleEnum.WeekDays);
+             || (isEvenDay ? tr.ScheduleId == (int)ScheduleEnum.EvenDays : tr.ScheduleId == (int)ScheduleEnum.OddDays)
+             || (isWeekendDay ? tr.ScheduleId == (int)ScheduleEnum.Weekend : tr.ScheduleId == (int)ScheduleEnum.WeekDays));
 
             return tripReports;
         }

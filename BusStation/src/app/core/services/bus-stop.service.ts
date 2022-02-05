@@ -9,7 +9,7 @@ import { BusStopParameters } from "../models/utility/bus-stop-parameters";
 
 @Injectable({ providedIn: 'root' })
 export class BusStopService {
-    public pathBase: string = `${connectionString}/busStop`;
+    public pathBase: string = `${connectionString}/busStops`;
 
     constructor(private http: HttpClient) { }
 

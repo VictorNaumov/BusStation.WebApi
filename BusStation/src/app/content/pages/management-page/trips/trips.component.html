@@ -3,7 +3,7 @@
     <div class="form-menu">
 
       <div class="row">
-        <h4 class="col-sm-8">Buses List</h4>
+        <h4 class="col-sm-8">Trips List</h4>
         <div class="col-sm-2">
           <button type="button" class="btn btn-outline-dark" style="border-radius: 0px;" data-toggle="modal" data-target="#addModal">
             Add
@@ -30,30 +30,27 @@
   </div>
 
   <div class="items-container">
-    <div *ngFor="let bus of buses">
+    <div *ngFor="let trip of trips">
       <div class="item-container" >
         <div class="row">
-          <div class="col-sm">
-            <b>Id: </b><span>{{bus.id}}</span>
+          <div class="col-sm-2">
+            <b>Id: </b><span>{{trip.id}}</span>
           </div>
-          <div class="col-sm">
-            <b>Name: </b><span>{{bus.name}}</span>
+          <div class="col-sm-4">
+            <b>Route id: </b><span>{{trip.routeId}}</span>
           </div>
-          <div class="col-sm">
-            <b>Number: </b><span>{{bus.number}}</span>
+          <div class="col-sm-4">
+            <b>Schedule id: </b><span>{{trip.scheduleId}}</span>
           </div>
-          <div class="col-sm">
-            <b>Count of seats: </b><span>{{bus.countOfSeats}}</span>
+          <div class="col-sm-4">
+            <b>Departure time: </b><span>{{trip.departureTime | date:'shortTime'}} </span>
           </div>
-          <div class="col-sm">
-            <b>Driver: </b><span>{{bus.driver}}</span>
-          </div>
-          <div style="padding-right: 10px;" class="col-sm">
+          <div class="col-sm-2" style="padding-right: 10px;" >
             <span >
-              <button (click)="putDataToUpdate(bus.id, bus)" type="button" class="btn btn-outline-dark" style="border-radius: 0px;" data-toggle="modal" data-target="#updateModal">
+              <button (click)="putDataToUpdate(trip.id, trip)" type="button" class="btn btn-outline-dark" style="border-radius: 0px;" data-toggle="modal" data-target="#updateModal">
                 Update
               </button>
-              <button (click)="putDataToDelete(bus.id)" type="button" class="btn btn-outline-dark" style="border-radius: 0px;" data-toggle="modal" data-target="#deleteModal">
+              <button (click)="putDataToDelete(trip.id)" type="button" class="btn btn-outline-dark" style="border-radius: 0px;" data-toggle="modal" data-target="#deleteModal">
                 Delete
               </button>
             </span>

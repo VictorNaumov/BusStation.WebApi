@@ -11,6 +11,11 @@ import { RouterModule } from '@angular/router';
 import { TripReportPageComponent } from './trip-report-page/trip-report-page.component';
 import { ManagementPageComponent } from './management-page/management-page.component';
 import { BusesComponent } from './management-page/buses/buses.component';
+import { AboutPageComponent } from './about-page/about-page.component';
+import { RoutesComponent } from './management-page/routes/routes.component';
+import { BusStopsComponent } from './management-page/bus-stops/bus-stops.component';
+import { RouteBusStopsComponent } from './management-page/route-bus-stops/route-bus-stops.component';
+import { TripsComponent } from './management-page/trips/trips.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +25,12 @@ import { BusesComponent } from './management-page/buses/buses.component';
     HomePageComponent,
     TripReportPageComponent,
     ManagementPageComponent,
-    BusesComponent
+    BusesComponent,
+    AboutPageComponent,
+    RoutesComponent,
+    BusStopsComponent,
+    RouteBusStopsComponent,
+    TripsComponent
   ],
   imports: [
     CommonModule,
