@@ -6,15 +6,16 @@ export interface TripReportIncomingDTO {
   arrivalTime: Date;
   routeId: number;
   routeTypeId: number;
-  routeTypeName: string;
+  routeType: string;
   busId: number;
   busName: string;
   busDriver: string;
   busNumber: string;
   countIfSeats: number;
   scheduleId: number;
-  scheduleName: string;
+  schedule: string;
   busStops: BusStopForReportIncomingDTO;
+  departureBusStop: string;
   destination: string;
   minutesInWay: number;
   price: number;

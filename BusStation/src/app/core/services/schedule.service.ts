@@ -5,7 +5,7 @@ import { connectionString } from "src/app/shared/constants/connection.constants"
 import { ScheduleIncomingDTO } from "../models/incoming/schedule-incoming-dto";
 
 @Injectable({ providedIn: 'root' })
-export class BusService {
+export class ScheduleService {
     public pathBase: string = `${connectionString}/schedule`;
 
     constructor(private http: HttpClient) { }

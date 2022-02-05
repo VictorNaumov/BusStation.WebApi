@@ -1,0 +1,84 @@
+.control-menu {
+  right: 120px;
+  top: 90px;
+  position: fixed;
+  float: right;
+  width: 350px;
+}
+
+.form-menu {
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  border: 1px solid dimgray;
+}
+
+.tripReport {
+  list-style: none;
+  margin: 0 -20px 0 0;
+  padding: 0;
+}
+
+.tripReport-wrapper {
+  display: block;
+  width: 100%;
+  float: menu;
+  transition: width 0.2s;
+}
+
+@media only screen and (min-width: 450px) {
+  .tripReport-wrapper {
+    width: 75%;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .tripReport-wrapper {
+    width: 50%;
+  }
+}
+
+@media only screen and (min-width: 1000px) {
+  .tripReport-wrapper {
+    width: 25%;
+  }
+}
+
+.tripReport {
+  width: 800px;
+  display: inline-block;
+  border: 1px solid dimgray;
+  position: relative;
+  background: #fff;
+  margin: 0 10px 10px 0;
+  text-decoration: none;
+  z-index: 0;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+.tripReport:hover {
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+}
+
+.tripReport-photo {
+  position: relative;
+  margin-top: 10px;
+  padding-bottom: 100%;
+  overflow: hidden;
+}
+
+.tripReport-photo img {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto;
+  transition: transform 0.4s ease-out;
+}
+
+.tripReport:hover .tripReport-photo img {
+  transform: scale(1.5);
+}

@@ -1,1 +1,95 @@
-<p>trip-report-page works!</p>
+<div class="container">
+  <div style="margin-left: 80px; margin-bottom: 60px;" *ngIf="isLoading">
+    <span>Loading...</span>
+  </div>
+  <div style="margin-left: 80px;  width: 70%;" *ngIf="!isLoading">
+    <div *ngIf="tripReports?.length == 0">No records found.</div>
+        <li class="tripReport-wrapper" *ngFor="let tripReport of tripReports">
+          <div class="tripReport">
+            <div>
+              <h4 style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">Bus Station - {{tripReport.departureBusStop}}</h4>
+              <p style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                <b>Count of stops: </b><span>{{tripReport.departureTime | date:'shortTime' }} - {{tripReport.arrivalTime | date:'shortTime' }} </span><br>
+                <b>Route type: </b><span>{{tripReport.routeType}}</span><br>
+                <b>Schedule: </b><span>{{tripReport.schedule}}</span><br>
+                <b>Price: </b><span>{{tripReport.price.toFixed(2)}}$</span><br>
+              </p>
+
+            </div>
+          </div>
+        </li>
+  </div>
+
+  <div class="control-menu">
+    <div class="form-menu">
+      <h3>Bus station</h3>
+      <hr style="background-color: dimgray; height: 1px;" />
+
+      <div class="form-group row">
+        <label class="col-sm-5 col-form-label" style="font-weight: bold">Search:</label>
+        <div class="col-sm-7">
+          <input class="form-control" style="border-radius: 0px;" type="search" id="search" (input)="search()" />
+        </div>
+      </div>
+      <hr style="background-color: dimgray; height: 1px;" />
+
+      <div class="form-group row">
+        <label class="col-sm-5 col-form-label" style="font-weight: bold">Route:</label>
+        <div class="col-sm-7">
+          <select *ngIf="routeType$ | async as routeTypes; else loading" class="form-control" style="border-radius: 0px;" id="routeType" (change)="routeTypeChange()">
+            <option value="0">All</option>
+            <option *ngFor="let routeType of routeTypes" value="{{routeType.name}}">{{routeType.name}}</option>
+          </select>
+        </div>
+      </div>
+      <hr style="background-color: dimgray; height: 1px;" />
+
+      <div class="form-group row">
+        <label class="col-sm-5 col-form-label" style="font-weight: bold">Schedule:</label>
+        <div class="col-sm-7">
+          <select *ngIf="schedule$ | async as schedules; else loading" class="form-control" style="border-radius: 0px;" id="schedule" (change)="scheduleChange()">
+            <option value="0">All</option>
+            <option *ngFor="let schedule of schedules" value="{{schedule.name}}">{{schedule.name}}</option>
+          </select>
+        </div>
+      </div>
+      <hr style="background-color: dimgray; height: 1px;" />
+
+      <div class="form-group row">
+        <label class="col-sm-5 col-form-label" style="font-weight: bold">Departure time:</label>
+        <div class="col-sm-7">
+          <input class="form-control" style="border-radius: 0px;" type="time" id="departureTime" (input)="departureTimeChange()" />
+        </div>
+      </div>
+      <hr style="background-color: dimgray; height: 1px;" />
+
+      <div class="form-group row">
+        <label class="col-sm-5 col-form-label" style="font-weight: bold">Arrival time:</label>
+        <div class="col-sm-7">
+          <input class="form-control" style="border-radius: 0px;" type="time" id="arrivalTime" (input)="arrivalTimeChange()" />
+        </div>
+      </div>
+      <hr style="background-color: dimgray; height: 1px;" />
+
+      <div class="form-group row">
+        <label class="col-sm-5 col-form-label" style="font-weight: bold">Date:</label>
+        <div class="col-sm-7">
+          <input class="form-control" style="border-radius: 0px;" type="date" id="date" (input)="dateChange()" />
+        </div>
+      </div>
+      <hr style="background-color: dimgray; height: 1px;" />
+      <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        Button with data-target
+      </button>
+      <div class="collapse" id="collapseExample">
+        <div class="card card-body">
+          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+        </div>
+      </div>
+  </div>
+
+</div>
+
+<ng-template #loading>
+  <span>Loading...</span>
+</ng-template>

@@ -24,7 +24,7 @@ namespace Products.Controllers
         [HttpGet(Name = "GetAllRouteTypes")]
         public async Task<IActionResult> GetAllRouteTypes()
         {
-            var routeTypes = await _repository.RouteType.GetAllRouteTypes(trackChanges: false);
+            var routeTypes = await _repository.RouteType.GetAllRouteTypesAsync(trackChanges: false);
             if (routeTypes.ToList().Count == 0)
             {
                 return NotFound();

@@ -54,6 +54,7 @@ namespace Products.Controllers
 
                     tripReport.BusStops.Add(busStopDTO);
                 }
+                tripReport.DepartureBusStop = tripReport.BusStops.LastOrDefault()?.Name;
             }
 
             return Ok(tripReportsDTO);

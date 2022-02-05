@@ -6,10 +6,9 @@ import { LoadingModule } from '../layout/loading/loading.module';
 import { SignInPageComponent } from './sign-in-page/sign-in-page.component';
 import { SignUpPageComponent } from './sign-up-page/sign-up-page.component';
 import { HomePageComponent } from './home-page/home-page.component';
-import { TripReportPageComponent } from './trip-report-page/trip-report-page.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { SchedulePageComponent } from './schedule-page/schedule-page.component';
+import { TripReportPageComponent } from './trip-report-page/trip-report-page.component';
 
 @NgModule({
   declarations: [
@@ -17,8 +16,7 @@ import { SchedulePageComponent } from './schedule-page/schedule-page.component';
     SignInPageComponent,
     SignUpPageComponent,
     HomePageComponent,
-    TripReportPageComponent,
-    SchedulePageComponent
+    TripReportPageComponent
   ],
   imports: [
     CommonModule,

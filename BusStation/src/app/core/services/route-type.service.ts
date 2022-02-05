@@ -5,7 +5,7 @@ import { connectionString } from "src/app/shared/constants/connection.constants"
 import { RouteTypeIncomingDTO } from "../models/incoming/route-type-incoming-dto";
 
 @Injectable({ providedIn: 'root' })
-export class BusService {
+export class RouteTypeService {
     public pathBase: string = `${connectionString}/routeType`;
 
     constructor(private http: HttpClient) { }
