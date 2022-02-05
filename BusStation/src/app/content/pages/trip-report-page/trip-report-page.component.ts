@@ -38,6 +38,8 @@ export class TripReportPageComponent implements OnInit {
   onPageChange(page: number = 1): void {
     this.tripReportParameters.pageNumber = page;
     this.sendQuery();
+    console.log(this.tripReportParameters);
+
   }
 
   getData(){

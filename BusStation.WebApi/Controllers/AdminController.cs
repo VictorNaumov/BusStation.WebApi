@@ -62,7 +62,7 @@ namespace BusStation.WebApi.Controllers
             var adminForRoles = await _userManager.FindByNameAsync(admin.UserName);
             var roles = await _userManager.GetRolesAsync(adminForRoles);
 
-            return Ok(new { Token = await _authManager.CreateToken(), roles = roles });
+            return Ok(await _authManager.CreateToken());
         }
 
         [HttpPut("password", Name = "ChangePassword")]

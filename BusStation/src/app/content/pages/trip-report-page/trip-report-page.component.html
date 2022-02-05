@@ -7,15 +7,18 @@
         <li class="tripReport-wrapper" *ngFor="let tripReport of tripReports">
           <div class="tripReport">
             <div>
-              <h4 style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">Bus Station - {{tripReport.departureBusStop}}</h4>
+              <h4 style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">Bus Station - {{tripReport.destination}}</h4>
               <p style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                 <b>Count of stops: </b><span>{{tripReport.departureTime | date:'shortTime' }} - {{tripReport.arrivalTime | date:'shortTime' }} </span><br>
                 <b>Route type: </b><span>{{tripReport.routeType}}</span><br>
                 <b>Schedule: </b><span>{{tripReport.schedule}}</span><br>
                 <b>Price: </b><span>{{tripReport.price.toFixed(2)}}$</span><br>
+                <b>Departure location: </b><span>Novopolotsk</span><br>
+                <b>Arrival location: </b><span>{{tripReport.busStops[tripReport.busStops.length - 1].location}}</span><br>
               </p>
 
             </div>
+
           </div>
         </li>
   </div>
@@ -37,7 +40,7 @@
         <label class="col-sm-5 col-form-label" style="font-weight: bold">Route:</label>
         <div class="col-sm-7">
           <select *ngIf="routeType$ | async as routeTypes; else loading" class="form-control" style="border-radius: 0px;" id="routeType" (change)="routeTypeChange()">
-            <option value="0">All</option>
+            <option value="">All</option>
             <option *ngFor="let routeType of routeTypes" value="{{routeType.name}}">{{routeType.name}}</option>
           </select>
         </div>
@@ -48,7 +51,7 @@
         <label class="col-sm-5 col-form-label" style="font-weight: bold">Schedule:</label>
         <div class="col-sm-7">
           <select *ngIf="schedule$ | async as schedules; else loading" class="form-control" style="border-radius: 0px;" id="schedule" (change)="scheduleChange()">
-            <option value="0">All</option>
+            <option value="">All</option>
             <option *ngFor="let schedule of schedules" value="{{schedule.name}}">{{schedule.name}}</option>
           </select>
         </div>
@@ -78,18 +81,13 @@
         </div>
       </div>
       <hr style="background-color: dimgray; height: 1px;" />
-      <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-        Button with data-target
-      </button>
-      <div class="collapse" id="collapseExample">
-        <div class="card card-body">
-          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-        </div>
-      </div>
   </div>
-
 </div>
 
 <ng-template #loading>
   <span>Loading...</span>
+</ng-template>
+
+<ng-template #test>
+  <span>test...</span>
 </ng-template>

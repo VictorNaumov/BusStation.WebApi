@@ -13,7 +13,7 @@ import { AdminRegistrationParameters } from "../models/utility/admin-registratio
 export class AuthService {
 
     public error$: Subject<string> = new Subject<string>();
-    public pathBase: string = `${connectionString}/account`;
+    public pathBase: string = `${connectionString}/account/`;
 
     constructor(
         private http: HttpClient,
@@ -25,17 +25,17 @@ export class AuthService {
             this.logout();
             return null;
         }
-        return localStorage.getItem('fb-token');
+        return localStorage.getItem('token');
     }
     public login(user: AdminValidationDTO): Observable<any> {
-      return this.http.post(`${this.pathBase}authenticate`, user).pipe(
+      return this.http.post(`${this.pathBase}login`, user).pipe(
         tap((result: any) => this.setToken(result)),
         catchError(this.handleError.bind(this))
       );
     }
 
     public signup(user: AdminRegistrationDTO, parameters: AdminRegistrationParameters): Observable<any> {
-      return this.http.post(getUrl(`${this.pathBase}register`, parameters) , user).pipe(
+      return this.http.post(getUrl(`${this.pathBase}`, parameters) , user).pipe(
         tap((result: any) => this.setToken(result)),
         catchError(this.handleError.bind(this))
       );

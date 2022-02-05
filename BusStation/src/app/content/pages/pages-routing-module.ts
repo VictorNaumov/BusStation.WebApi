@@ -4,6 +4,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { AuthGuard } from "src/app/core/guards/auth.guard";
 import { PagesComponent } from "./pages.component";
 import { SignInPageComponent } from "./sign-in-page/sign-in-page.component";
+import { ManagementPageComponent } from "./management-page/management-page.component";
 
 const routes: Routes = [
     {
@@ -11,8 +12,9 @@ const routes: Routes = [
         component: PagesComponent,
         children: [
             { path: "signin", component: SignInPageComponent },
+            { path: "management", component: ManagementPageComponent },
         ],
-        // canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: "**",

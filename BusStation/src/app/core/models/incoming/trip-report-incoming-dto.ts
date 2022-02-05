@@ -14,7 +14,7 @@ export interface TripReportIncomingDTO {
   countIfSeats: number;
   scheduleId: number;
   schedule: string;
-  busStops: BusStopForReportIncomingDTO;
+  busStops: BusStopForReportIncomingDTO[];
   departureBusStop: string;
   destination: string;
   minutesInWay: number;

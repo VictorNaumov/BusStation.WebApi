@@ -9,6 +9,8 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TripReportPageComponent } from './trip-report-page/trip-report-page.component';
+import { ManagementPageComponent } from './management-page/management-page.component';
+import { BusesComponent } from './management-page/buses/buses.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { TripReportPageComponent } from './trip-report-page/trip-report-page.com
     SignInPageComponent,
     SignUpPageComponent,
     HomePageComponent,
-    TripReportPageComponent
+    TripReportPageComponent,
+    ManagementPageComponent,
+    BusesComponent
   ],
   imports: [
     CommonModule,
@@ -25,7 +29,7 @@ import { TripReportPageComponent } from './trip-report-page/trip-report-page.com
     FormsModule,
     ReactiveFormsModule,
     RouterModule
-  ],
+    ],
   exports: [
     PagesComponent
   ],

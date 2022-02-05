@@ -27,17 +27,17 @@ namespace Products.Controllers
         public async Task<IActionResult> GetReportAboutAllTrips([FromQuery] TripReportParameters tripReportParameters)
         {
             var tripReportsEntities = await _repository.TripReport.GetAllTripReportsAsync(tripReportParameters, trackChanges: false);
-            var tripReportsDTO = _mapper.Map<IEnumerable<TripReportOutgoingDTO>>(tripReportsEntities);
+           var tripReportsDTO = _mapper.Map<IEnumerable<TripReportOutgoingDTO>>(tripReportsEntities);
 
             foreach (var tripReport in tripReportsDTO)
             {
                 var routeBusStopsEntities = await _repository.RouteBusStop.GetRouteBusStopByRouteIdAsync(tripReport.RouteId, trackChanges: false);
-                var destination = routeBusStopsEntities.OrderBy(bs => bs.Order).Last().BusStop.Name;
+                var lastBusStop = routeBusStopsEntities.OrderBy(bs => bs.Order).Last().BusStop;
 
-                tripReport.Destination = destination;
+                tripReport.Destination = lastBusStop.Name;
                 tripReport.MinutesInWay = routeBusStopsEntities.Sum(bs => bs.MinutesInWay);
-                tripReport.Price = tripReport.RouteTypeId == 3 ? tripReport.MinutesInWay / 5 :
-                                   tripReport.RouteTypeId == 2 ? tripReport.MinutesInWay / 10 : 3;
+                tripReport.Price = tripReport.RouteTypeId == 3 ? tripReport.MinutesInWay / 25 :
+                                   tripReport.RouteTypeId == 2 ? tripReport.MinutesInWay / 25 : 1;
                 tripReport.ArrivalTime = tripReport.DepartureTime.AddMinutes(tripReport.MinutesInWay + routeBusStopsEntities.Sum(bs => bs.WaitingTime));
 
                 var time = tripReport.DepartureTime;
@@ -54,7 +54,18 @@ namespace Products.Controllers
 
                     tripReport.BusStops.Add(busStopDTO);
                 }
-                tripReport.DepartureBusStop = tripReport.BusStops.LastOrDefault()?.Name;
+
+                if (!string.IsNullOrEmpty(tripReportParameters.SearchTerm))
+                {
+                    tripReportsDTO = tripReportsDTO.Where(tr => tr.BusStops.Any(bs => bs.Name.ToLower().Contains(tripReportParameters.SearchTerm.ToLower())));
+                }
+
+                if (tripReportParameters.DepartureTime != System.DateTime.MinValue)
+                    tripReportsDTO = tripReportsDTO.Where(tr => tripReportParameters.DepartureTime >= tr.DepartureTime);
+
+                if (tripReportParameters.ArrivalTime != System.DateTime.MinValue)
+                    tripReportsDTO = tripReportsDTO.Where(tr => tripReportParameters.ArrivalTime >= tr.ArrivalTime);
+
             }
 
             return Ok(tripReportsDTO);

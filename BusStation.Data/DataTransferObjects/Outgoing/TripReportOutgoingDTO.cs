@@ -20,7 +20,6 @@ namespace BusStation.Data.Models
         public int ScheduleId { get; set; }
         public string Schedule { get; set; }
 
-        public string DepartureBusStop { get; set; }
         public List<BusStopForReportOutgoingDTO> BusStops { get; set; }
         public string Destination { get; set; }
         public int MinutesInWay { get; set; }

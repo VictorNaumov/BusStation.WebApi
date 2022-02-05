@@ -50,8 +50,6 @@ export class SignUpPageComponent implements OnInit {
     }
     this.notificationService.ErrorNotice("suck")
 
-
-
     this.submitted = true;
 
     const user: AdminRegistrationDTO = {

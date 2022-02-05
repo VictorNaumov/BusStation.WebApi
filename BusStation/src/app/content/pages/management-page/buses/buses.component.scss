@@ -1,0 +1,29 @@
+.main-container {
+  margin-right: 180px;
+}
+
+.control-menu {
+  float: left;
+  width: 300px;
+}
+
+.form-menu {
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  border: 1px solid dimgray;
+}
+
+.items-container {
+  float: left;
+  margin-left: 20px;
+  margin-bottom: 60px;
+}
+
+.item-container {
+  padding: 10px;
+  border: 1px solid dimgray;
+  width: 600px;
+}
+  .item-container:hover {
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  }

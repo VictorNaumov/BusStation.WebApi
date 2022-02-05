@@ -1,4 +1,5 @@
 ﻿using BusStation.Contracts;
+using BusStation.Core.Repositories.Extensions;
 using BusStation.Data;
 using BusStation.Data.Models;
 using BusStation.Data.RequestFeatures;
@@ -13,7 +14,12 @@ namespace BusStation.Core.Repositories
         public TripReportRepository(RepositoryContext repositoryContext) : base(repositoryContext) { }
 
         public async Task<List<TripReport>> GetAllTripReportsAsync(TripReportParameters tripReportParameters, bool trackChanges) =>
-            await FindAll(trackChanges).ToListAsync();
+            await FindAll(trackChanges)
+            .Sort(tripReportParameters.SearchTerm)
+            .FilterBySchedule(tripReportParameters)
+            .FilterByDate(tripReportParameters)
+            .FilterByRoute(tripReportParameters)
+            .ToListAsync();
 
         public async Task<TripReport> GetTripReportByIdAsync(int tripId, bool trackChanges) =>
             await FindByCondition(c => c.TripId.Equals(tripId), trackChanges)
