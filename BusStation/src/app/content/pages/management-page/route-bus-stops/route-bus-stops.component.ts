@@ -1,5 +1,7 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { RouteBusStopIncomingDTO } from 'src/app/core/models/incoming/route-bus-stop-incoming-dto';
 import { RouteBusStopOutgoingDTO } from 'src/app/core/models/outgoing/route-bus-stop-outgoing-dto';
 import { Pagination } from 'src/app/core/models/utility/pagination.interfaces';
@@ -14,9 +16,7 @@ import { RouteBusStopService } from 'src/app/core/services/route-bus-stop.servic
 export class RouteBusStopsComponent implements OnInit {
   public routeBusStops: RouteBusStopIncomingDTO[] = [];
 
-  public addForm: FormGroup = new FormGroup({});
-  public updateForm: FormGroup = new FormGroup({});
-  public deleteForm: FormGroup = new FormGroup({});
+  public form: FormGroup = new FormGroup({});
 
   public submitted = false;
   public message: string = '';
@@ -37,30 +37,16 @@ export class RouteBusStopsComponent implements OnInit {
   }
 
   constructor(
-    private routeBusStopService: RouteBusStopService) { }
+    private routeBusStopService: RouteBusStopService,
+    private notification: NzNotificationService) { }
 
   ngOnInit(): void {
-    this.metaData.currentPage = 1;
-    this.addForm = new FormGroup({
+    this.form = new FormGroup({
       routeId: new FormControl('', [Validators.required]),
       busStopId: new FormControl('', [Validators.required]),
       minutesInWay: new FormControl('', [Validators.required]),
       waitingTime: new FormControl('', [Validators.required]),
       order: new FormControl('', [Validators.required]),
-    });
-
-
-    this.updateForm = new FormGroup({
-      oldRouteId: new FormControl('', [Validators.required]),
-      oldBusStopId: new FormControl('', [Validators.required]),
-      oldMinutesInWay: new FormControl('', [Validators.required]),
-      oldWaitingTime: new FormControl('', [Validators.required]),
-      oldOrder: new FormControl('', [Validators.required]),
-    });
-    this.deleteForm = new FormGroup({
-      routeId: new FormControl('', [Validators.required]),
-      busStopId: new FormControl('', [Validators.required]),
-      order: new FormControl()
     });
     this.sendQuery();
   }
@@ -83,54 +69,123 @@ export class RouteBusStopsComponent implements OnInit {
     this.onPageChange();
   }
 
-  public putDataToUpdate(routeBusStop: RouteBusStopOutgoingDTO): void {
-    this.updateForm.controls['oldRouteId'].setValue(routeBusStop.routeId);
-    this.updateForm.controls['oldBusStopId'].setValue(routeBusStop.busStopId);
-    this.updateForm.controls['oldWaitingTime'].setValue(routeBusStop.minutesInWay);
-    this.updateForm.controls['oldOrder'].setValue(routeBusStop.order);
+  isAddVisible = false;
+  isAddOkLoading = false;
+  showAddModal(): void {
+    this.isAddVisible = true;
   }
 
-  public putDataToDelete(routeBusStop: RouteBusStopOutgoingDTO): void {
-    this.deleteForm.controls['routeId'].setValue(routeBusStop.routeId);
-    this.updateForm.controls['busStopId'].setValue(routeBusStop.busStopId);
-  }
+  handleAddOk(): void {
+    this.isAddOkLoading = true;
 
-  public updateItem(): void {
-    if (this.updateForm.invalid) return;
-
-    this.submitted = true;
+    if (this.form.invalid) {
+      this.isAddOkLoading = false;
+      return;
+    }
 
     const routeBusStop: RouteBusStopOutgoingDTO = {
-      routeId: this.updateForm.value.routeId,
-      busStopId: this.updateForm.value.busStopId,
-      minutesInWay: this.updateForm.value.minutesInWay,
-      waitingTime: this.updateForm.value.waitingTime,
-      order: this.updateForm.value.order,
+      routeId: this.form.value.routeId,
+      busStopId: this.form.value.busStopId,
+      minutesInWay: this.form.value.minutesInWay,
+      waitingTime: this.form.value.waitingTime,
+      order: this.form.value.order,
     };
 
-    this.routeBusStopService.UpdateRouteBusStop(this.updateForm.value.id, routeBusStop).subscribe();
+    this.routeBusStopService.CreateRouteBusStop(routeBusStop).subscribe(res =>{
+      this.writeNotification("Result adding!", "New route was added in database.")
+      this.isAddVisible = false;
+      this.isAddOkLoading = false;
+      this.sendQuery();
+    },
+    (err: HttpErrorResponse)=>{
+      this.writeNotification("Invalid entity!", err.status != 500 ? err.message : "Something went wrong!");
+    });
   }
 
-  public deleteItem(): void {
-    if (this.deleteForm.invalid) return;
-
-    this.submitted = true;
-    this.routeBusStopService.DeleteRouteBusStop(this.deleteForm.value.deleteId).subscribe();
+  handleAddCancel(): void {
+    this.isAddVisible = false;
   }
 
-  public addItem(): void {
-    if (this.addForm.invalid) return;
 
-    this.submitted = true;
+  isUpdateVisible = false;
+  isUpdateOkLoading = false;
+  showUpdateModal(routeBusStop: RouteBusStopIncomingDTO): void {
+    this.form.controls['routeId'].setValue(routeBusStop.routeId);
+    this.form.controls['busStopId'].setValue(routeBusStop.busStopId);
+    this.form.controls['waitingTime'].setValue(routeBusStop.waitingTime);
+    this.form.controls['minutesInWay'].setValue(routeBusStop.minutesInWay);
+    this.form.controls['order'].setValue(routeBusStop.order);
+    this.isUpdateVisible = true;
+  }
+
+  handleUpdateOk(): void {
+    this.isUpdateOkLoading = true;
+
+    if (this.form.invalid) {
+      this.isUpdateOkLoading = false;
+      return;
+    }
 
     const routeBusStop: RouteBusStopOutgoingDTO = {
-      routeId: this.updateForm.value.routeId,
-      busStopId: this.updateForm.value.busStopId,
-      minutesInWay: this.updateForm.value.minutesInWay,
-      waitingTime: this.updateForm.value.waitingTime,
-      order: this.updateForm.value.order,
+      routeId: this.form.value.routeId,
+      busStopId: this.form.value.busStopId,
+      minutesInWay: this.form.value.minutesInWay,
+      waitingTime: this.form.value.waitingTime,
+      order: this.form.value.order,
     };
 
-    this.routeBusStopService.CreateRouteBusStop(routeBusStop).subscribe();
+    this.routeBusStopService.UpdateRouteBusStop(routeBusStop).subscribe(res =>{
+      this.writeNotification("Result updating!", "The route was updated in database.")
+      this.isUpdateVisible = false;
+      this.isUpdateOkLoading = false;
+      this.sendQuery();
+    },
+    (err: HttpErrorResponse)=>{
+      this.writeNotification("Invalid entity!", err.status != 500 ? err.message : "Something went wrong!");
+     });
+    }
+
+  handleUpdateCancel(): void {
+    this.isUpdateVisible = false;
+  }
+
+  isDeleteVisible = false;
+  isDeleteOkLoading = false;
+  showDeleteModal(routeBusStop: RouteBusStopIncomingDTO): void {
+    this.form.controls['routeId'].setValue(routeBusStop.routeId);
+    this.form.controls['busStopId'].setValue(routeBusStop.busStopId);
+    this.isDeleteVisible = true;
+  }
+
+  handleDeleteOk(): void {
+    this.isDeleteOkLoading = true;
+
+    if (this.form.invalid) {
+      this.isDeleteOkLoading = false;
+      return;
+    }
+
+
+    this.routeBusStopService.DeleteRouteBusStop(this.form.value.routeId, this.form.value.busStopId).subscribe(res =>{
+      this.writeNotification("Result deleting!", "The route was deleted from database.");
+      this.isDeleteVisible = false;
+      this.isDeleteOkLoading = false;
+      this.sendQuery();
+    },
+    (err: HttpErrorResponse) => {
+      this.writeNotification("Invalid entity!", err.status != 500 ? err.message : "Something went wrong!");
+    });
+  }
+
+  handleDeleteCancel(): void {
+    this.isDeleteVisible = false;
+  }
+
+  writeNotification(header: string, text:string){
+    this.notification.blank(
+      header,
+      text,
+      { nzDuration: 10000 }
+    );
   }
 }

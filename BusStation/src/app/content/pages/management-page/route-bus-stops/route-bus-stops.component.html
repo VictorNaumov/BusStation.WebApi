@@ -5,7 +5,7 @@
       <div class="row">
         <h4 class="col-sm-8">Route bus stops</h4>
         <div class="col-sm-2">
-          <button type="button" class="btn btn-outline-dark" style="border-radius: 0px;" data-toggle="modal" data-target="#addModal">
+          <button (click)="showAddModal()" class="btn btn-outline-dark" style="border-radius: 0px;">
             Add
           </button>
         </div>
@@ -43,10 +43,10 @@
           </div>
           <div style="padding-right: 10px;" class="col-sm">
             <span >
-              <button (click)="putDataToUpdate(routeBusStop)" type="button" class="btn btn-outline-dark" style="border-radius: 0px;" data-toggle="modal" data-target="#updateModal">
+              <button (click)="showUpdateModal(routeBusStop)" class="btn btn-outline-dark" style="border-radius: 0px;">
                 Update
               </button>
-              <button (click)="putDataToDelete(routeBusStop)" type="button" class="btn btn-outline-dark" style="border-radius: 0px;" data-toggle="modal" data-target="#deleteModal">
+              <button (click)="showDeleteModal(routeBusStop)" class="btn btn-outline-dark" style="border-radius: 0px;">
                 Delete
               </button>
             </span>
@@ -58,102 +58,127 @@
   </div>
 </div>
 
-<!--Modal Add Item-->
-<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Adding Provider</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form [formGroup]="addForm" (ngSubmit)="addItem()">
-          <div class="form-group" [ngClass]="{invalid: addForm.get('routeId')?.touched && addForm.get('routeId')?.invalid}">
-            <label class="col-form-label" style="font-weight: bold" for="routeId">routeId: </label>
-            <input class="form-control" style="border-radius: 0px;" id="routeId" type="text" formControlName="routeId">
-            <div class="validation" *ngIf="addForm.get('routeId')?.touched && addForm.get('routeId')?.invalid">
-              <small *ngIf="addForm.get('routeId')?.errors?.required">Enter field.</small>
+<nz-modal
+      [(nzVisible)]="isAddVisible"
+      nzTitle="Add route bus stop"
+      (nzOnCancel)="handleAddCancel()"
+      (nzOnOk)="handleAddOk()"
+      [nzOkLoading]="isAddOkLoading"
+    >
+      <div *nzModalContent>
+        <form [formGroup]="form">
+          <div class="form-group" [ngClass]="{invalid: form.get('routeId')?.touched && form.get('routeId')?.invalid}">
+            <label class="col-form-label" style="font-weight: bold" for="routeId">Route id: </label>
+            <input class="form-control" style="border-radius: 0px;" id="routeId" type="number" formControlName="routeId">
+            <div class="validation" *ngIf="form.get('routeId')?.touched && form.get('routeId')?.invalid">
+              <small *ngIf="form.get('routeId')?.errors?.required">Enter field.</small>
             </div>
           </div>
-          <div class="form-group">
-            <button type="submit" (click)="addItem()" class="btn btn-outline-dark" style="border-radius: 0px;" [disabled]="addForm?.invalid || submitted" data-dismiss="modal">Add</button>
-            <button type="button" class="btn btn-outline-danger" style="border-radius: 0px;" data-dismiss="modal">Close</button>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!--Modal Update Item-->
-<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Update Provider</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form [formGroup]="updateForm" (ngSubmit)="updateItem()">
-          <div class="form-group" [ngClass]="{invalid: updateForm.get('oldRouteId')?.touched && updateForm.get('oldRouteId')?.invalid}">
-            <label class="col-form-label" style="font-weight: bold" for="oldRouteId">routeId: </label>
-            <input class="form-control" style="border-radius: 0px;" id="oldRouteId" type="text" formControlName="oldRouteId">
-            <input class="form-control" style="border-radius: 0px;" id="updateid" type="number" hidden formControlName="updateid">
-            <div class="validation" *ngIf="updateForm.get('oldRouteId')?.touched && updateForm.get('oldRouteId')?.invalid">
-              <small *ngIf="updateForm.get('oldRouteId')?.errors?.required">Enter field.</small>
+          <div class="form-group" [ngClass]="{invalid: form.get('busStopId')?.touched && form.get('busStopId')?.invalid}">
+            <label class="col-form-label" style="font-weight: bold" for="busStopId">Bus stop id: </label>
+            <input class="form-control" style="border-radius: 0px;" id="busStopId" type="number" formControlName="busStopId">
+            <div class="validation" *ngIf="form.get('busStopId')?.touched && form.get('busStopId')?.invalid">
+              <small *ngIf="form.get('busStopId')?.errors?.required">Enter field.</small>
             </div>
           </div>
-          <div class="form-group">
-            <button type="submit" (click)="updateItem()" class="btn btn-outline-dark" style="border-radius: 0px;" [disabled]="updateForm?.invalid || submitted" data-dismiss="modal">Update</button>
-            <button type="button" class="btn btn-outline-danger" style="border-radius: 0px;" data-dismiss="modal">Close</button>
+          <div class="form-group" [ngClass]="{invalid: form.get('order')?.touched && form.get('order')?.invalid}">
+            <label class="col-form-label" style="font-weight: bold" for="order">Order: </label>
+            <input class="form-control" style="border-radius: 0px;" id="order" type="number" formControlName="order">
+            <div class="validation" *ngIf="form.get('order')?.touched && form.get('order')?.invalid">
+              <small *ngIf="form.get('order')?.errors?.required">Enter field.</small>
+            </div>
+          </div>
+          <div class="form-group" [ngClass]="{invalid: form.get('minutesInWay')?.touched && form.get('minutesInWay')?.invalid}">
+            <label class="col-form-label" style="font-weight: bold" for="minutesInWay">Minutes in way: </label>
+            <input class="form-control" style="border-radius: 0px;" id="minutesInWay" type="number" formControlName="minutesInWay">
+            <div class="validation" *ngIf="form.get('minutesInWay')?.touched && form.get('minutesInWay')?.invalid">
+              <small *ngIf="form.get('minutesInWay')?.errors?.required">Enter field.</small>
+            </div>
+          </div>
+          <div class="form-group" [ngClass]="{invalid: form.get('waitingTime')?.touched && form.get('waitingTime')?.invalid}">
+            <label class="col-form-label" style="font-weight: bold" for="waitingTime">Waiting time: </label>
+            <input class="form-control" style="border-radius: 0px;" id="waitingTime" type="number" formControlName="waitingTime">
+            <div class="validation" *ngIf="form.get('waitingTime')?.touched && form.get('waitingTime')?.invalid">
+              <small *ngIf="form.get('waitingTime')?.errors?.required">Enter field.</small>
+            </div>
           </div>
         </form>
       </div>
-      <!--<div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>-->
-    </div>
-  </div>
-</div>
+      <div *nzModalFooter>
+        <button class="btn btn-outline-dark" style="border-radius: 0px; margin-left: 10px;" (click)="handleAddOk()" >Ok</button>
+        <button class="btn btn-outline-danger" style="border-radius: 0px;" (click)="handleAddCancel()">Cancel</button>
+      </div>
+</nz-modal>
 
-<!--Modal Delete Item-->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Delete Provider</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form [formGroup]="deleteForm" (ngSubmit)="deleteItem()">
-          <div class="form-group">
-            <label class="col-form-label" style="font-weight: bold">Are You shure? </label>
-            <input class="form-control" style="border-radius: 0px;" id="deleteid" type="number" hidden formControlName="deleteid">
+<nz-modal
+      [(nzVisible)]="isUpdateVisible"
+      nzTitle="Update route bus stop"
+      (nzOnCancel)="handleUpdateCancel()"
+      (nzOnOk)="handleUpdateOk()"
+      [nzOkLoading]="isUpdateOkLoading"
+    >
+      <div *nzModalContent>
+        <form [formGroup]="form">
+          <div class="form-group" [ngClass]="{invalid: form.get('routeId')?.touched && form.get('routeId')?.invalid}">
+            <label class="col-form-label" style="font-weight: bold" for="routeId">Route id: </label>
+            <input class="form-control" style="border-radius: 0px;" id="routeId" type="number" formControlName="routeId">
+            <div class="validation" *ngIf="form.get('routeId')?.touched && form.get('routeId')?.invalid">
+              <small *ngIf="form.get('routeId')?.errors?.required">Enter field.</small>
+            </div>
           </div>
-          <div class="form-group">
-            <button type="submit" (click)="deleteItem()" class="btn btn-outline-dark" style="border-radius: 0px;" [disabled]="deleteForm?.invalid || submitted" data-dismiss="modal">Delete</button>
-            <button type="button" class="btn btn-outline-danger" style="border-radius: 0px;" data-dismiss="modal">Close</button>
+          <div class="form-group" [ngClass]="{invalid: form.get('busStopId')?.touched && form.get('busStopId')?.invalid}">
+            <label class="col-form-label" style="font-weight: bold" for="busStopId">Bus stop id: </label>
+            <input class="form-control" style="border-radius: 0px;" id="busStopId" type="number" formControlName="busStopId">
+            <div class="validation" *ngIf="form.get('busStopId')?.touched && form.get('busStopId')?.invalid">
+              <small *ngIf="form.get('busStopId')?.errors?.required">Enter field.</small>
+            </div>
+          </div>
+          <div class="form-group" [ngClass]="{invalid: form.get('order')?.touched && form.get('order')?.invalid}">
+            <label class="col-form-label" style="font-weight: bold" for="order">Order: </label>
+            <input class="form-control" style="border-radius: 0px;" id="order" type="number" formControlName="order">
+            <div class="validation" *ngIf="form.get('order')?.touched && form.get('order')?.invalid">
+              <small *ngIf="form.get('order')?.errors?.required">Enter field.</small>
+            </div>
+          </div>
+          <div class="form-group" [ngClass]="{invalid: form.get('minutesInWay')?.touched && form.get('minutesInWay')?.invalid}">
+            <label class="col-form-label" style="font-weight: bold" for="minutesInWay">Minutes in way: </label>
+            <input class="form-control" style="border-radius: 0px;" id="minutesInWay" type="number" formControlName="minutesInWay">
+            <div class="validation" *ngIf="form.get('minutesInWay')?.touched && form.get('minutesInWay')?.invalid">
+              <small *ngIf="form.get('minutesInWay')?.errors?.required">Enter field.</small>
+            </div>
+          </div>
+          <div class="form-group" [ngClass]="{invalid: form.get('waitingTime')?.touched && form.get('waitingTime')?.invalid}">
+            <label class="col-form-label" style="font-weight: bold" for="waitingTime">Waiting time: </label>
+            <input class="form-control" style="border-radius: 0px;" id="waitingTime" type="number" formControlName="waitingTime">
+            <div class="validation" *ngIf="form.get('waitingTime')?.touched && form.get('waitingTime')?.invalid">
+              <small *ngIf="form.get('waitingTime')?.errors?.required">Enter field.</small>
+            </div>
           </div>
         </form>
       </div>
-      <!--<div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>-->
-    </div>
-  </div>
-</div>
+      <div *nzModalFooter>
+        <button class="btn btn-outline-dark" style="border-radius: 0px; margin-left: 10px;" (click)="handleUpdateOk()" >Ok</button>
+        <button class="btn btn-outline-danger" style="border-radius: 0px;" (click)="handleUpdateCancel()">Cancel</button>
+      </div>
+</nz-modal>
+
+<nz-modal
+      [(nzVisible)]="isDeleteVisible"
+      nzTitle="Delete route bus stop"
+      (nzOnCancel)="handleDeleteCancel()"
+      (nzOnOk)="handleDeleteOk()"
+      [nzOkLoading]="isDeleteOkLoading"
+    >
+      <div *nzModalContent>
+        <p>
+          Are you sure want delete this route bus stop?
+        </p>
+      </div>
+      <div *nzModalFooter>
+        <button class="btn btn-outline-dark" style="border-radius: 0px; margin-left: 10px;" (click)="handleDeleteOk()" >Ok</button>
+        <button class="btn btn-outline-danger" style="border-radius: 0px;" (click)="handleDeleteCancel()">Cancel</button>
+      </div>
+</nz-modal>
 
 <ng-template #loading>
   <div>Loading...</div>

@@ -13,13 +13,32 @@
               <div *ngIf="tripReport.routeType=='Intercity'">
                 <h4 style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">Novopolotsk - {{tripReport.busStops[tripReport.busStops.length - 1].location}} ({{tripReport.routeType}})</h4>
               </div>
+              <hr>
               <p style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                <b>Count of stops: </b><span>{{tripReport.departureTime | date:'shortTime' }} - {{tripReport.arrivalTime | date:'shortTime' }} </span><br>
+                <b>Time: </b><span>{{tripReport.departureTime | date:'shortTime' }} - {{tripReport.arrivalTime | date:'shortTime' }} </span><br>
+                <b>Minutes in way: </b><span>{{tripReport.minutesInWay}} minutes. </span><br>
                 <b>Schedule: </b><span>{{tripReport.schedule}}</span><br>
                 <b>Price: </b><span>{{tripReport.price.toFixed(2)}}$</span><br>
               </p>
+              <hr>
+              <nz-collapse nzGhost class="collapse-zorro">
+                <nz-collapse-panel
+                [nzShowArrow]="false"
+                [nzHeader]="'Show details'">
+                    <b>Bus: </b><span> {{tripReport.busName}} "{{tripReport.busNumber}}" {{tripReport.countOfSeats}} count of seats</span><br>
+                    <b>Driver: </b><span>{{tripReport.busDriver }} </span>
+                  <li *ngFor="let busStop of tripReport.busStops; let i = index">
+                      <div *ngIf="tripReport.routeType=='Urban' || tripReport.routeType=='Suburban'">
+                          <b>{{i + 1}}: </b> <span>{{busStop.name }} {{busStop.arrivalTime  | date:'shortTime' }} </span>
+                      </div>
+                      <div *ngIf="tripReport.routeType=='Intercity'">
+                          <b>{{i + 1}}: </b> <span>{{busStop.name }} {{busStop.arrivalTime  | date:'shortTime' }} - {{busStop.departureTime | date:'shortTime' }} </span>
+                      </div>
+                  </li>
+                </nz-collapse-panel>
+              </nz-collapse>
             </div>
-          </div>
+        </div>
         </li>
   </div>
 
@@ -91,3 +110,4 @@
 <ng-template #test>
   <span>test...</span>
 </ng-template>
+

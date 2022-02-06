@@ -15,19 +15,21 @@ export class RouteBusStopService {
         return this.http.get<RouteBusStopIncomingDTO[]>(this.pathBase);
     }
 
-    public GetRouteBusStopById(routeId: number, busStopId: number, order: number): Observable<RouteBusStopIncomingDTO> {
-        return this.http.get<RouteBusStopIncomingDTO>(`${this.pathBase}/${routeId}`);
+    public GetRouteBusStopById(routeId: number, busStopId: number): Observable<RouteBusStopIncomingDTO> {
+        return this.http.get<RouteBusStopIncomingDTO>(`${this.pathBase}/${routeId}/${busStopId}`);
     }
 
     public CreateRouteBusStop(routeBusStop: RouteBusStopOutgoingDTO): Observable<RouteBusStopIncomingDTO> {
+      console.log(routeBusStop);
+
         return this.http.post<RouteBusStopIncomingDTO>(`${this.pathBase}`, routeBusStop);
     }
 
-    public UpdateRouteBusStop(routeBusStopId: number, routeBusStop: RouteBusStopOutgoingDTO): Observable<RouteBusStopIncomingDTO> {
-        return this.http.put<RouteBusStopIncomingDTO>(`${this.pathBase}/${routeBusStopId}`, routeBusStop);
+    public UpdateRouteBusStop(routeBusStop: RouteBusStopOutgoingDTO): Observable<RouteBusStopIncomingDTO> {
+        return this.http.put<RouteBusStopIncomingDTO>(`${this.pathBase}/${routeBusStop.routeId}/${routeBusStop.busStopId}`, routeBusStop);
     }
 
-    public DeleteRouteBusStop(routeBusStopId: number): Observable<any> {
-        return this.http.delete<any>(`${this.pathBase}/${routeBusStopId}`);
+    public DeleteRouteBusStop(routeId: number, busStopId: number): Observable<any> {
+        return this.http.delete<any>(`${this.pathBase}/${routeId}/${busStopId}`);
     }
 }

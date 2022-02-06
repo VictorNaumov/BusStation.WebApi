@@ -5,7 +5,7 @@
       <div class="row">
         <h4 class="col-sm-8">Routes</h4>
         <div class="col-sm-2">
-          <button type="button" class="btn btn-outline-dark" style="border-radius: 0px;" data-toggle="modal" data-target="#addModal">
+          <button (click)="showAddModal()" class="btn btn-outline-dark" style="border-radius: 0px;">
             Add
           </button>
         </div>
@@ -23,21 +23,21 @@
   </div>
 
   <div class="items-container">
-    <div *ngFor="let bus of buses">
+    <div *ngFor="let route of routes">
       <div class="item-container" >
         <div class="row">
           <div class="col-sm">
-            <b>Id: </b><span>{{bus.id}}</span>
+            <b>Id: </b><span>{{route.id}}</span>
           </div>
           <div class="col-sm">
-            <b>Route type: </b><span>{{bus.routeTypeId}}</span>
+            <b>Route type: </b><span>{{route.routeTypeId}}</span>
           </div>
           <div style="padding-right: 10px;" class="col-sm">
             <span >
-              <button (click)="putDataToUpdate(bus.id, bus)" type="button" class="btn btn-outline-dark" style="border-radius: 0px;" data-toggle="modal" data-target="#updateModal">
+              <button (click)="showUpdateModal(route.id, route)" class="btn btn-outline-dark" style="border-radius: 0px;">
                 Update
               </button>
-              <button (click)="putDataToDelete(bus.id)" type="button" class="btn btn-outline-dark" style="border-radius: 0px;" data-toggle="modal" data-target="#deleteModal">
+              <button (click)="showDeleteModal(route.id)"class="btn btn-outline-dark" style="border-radius: 0px;">
                 Delete
               </button>
             </span>
@@ -49,102 +49,71 @@
   </div>
 </div>
 
-<!--Modal Add Item-->
-<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Adding Provider</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form [formGroup]="addForm" (ngSubmit)="addItem()">
-          <div class="form-group" [ngClass]="{invalid: addForm.get('routeTypeId')?.touched && addForm.get('routeTypeId')?.invalid}">
-            <label class="col-form-label" style="font-weight: bold" for="routeTypeId">routeTypeId: </label>
-            <input class="form-control" style="border-radius: 0px;" id="routeTypeId" type="text" formControlName="routeTypeId">
-            <div class="validation" *ngIf="addForm.get('routeTypeId')?.touched && addForm.get('routeTypeId')?.invalid">
-              <small *ngIf="addForm.get('routeTypeId')?.errors?.required">Enter field.</small>
+<nz-modal
+      [(nzVisible)]="isAddVisible"
+      nzTitle="Add route"
+      (nzOnCancel)="handleAddCancel()"
+      (nzOnOk)="handleAddOk()"
+      [nzOkLoading]="isAddOkLoading"
+    >
+      <div *nzModalContent>
+        <form [formGroup]="form">
+          <div class="form-group" [ngClass]="{invalid: form.get('routeTypeId')?.touched && form.get('routeTypeId')?.invalid}">
+            <label class="col-form-label" style="font-weight: bold" for="routeTypeId">Route type id: </label>
+            <input class="form-control" style="border-radius: 0px;" id="routeTypeId" type="number" formControlName="routeTypeId">
+            <div class="validation" *ngIf="form.get('routeTypeId')?.touched && form.get('routeTypeId')?.invalid">
+              <small *ngIf="form.get('routeTypeId')?.errors?.required">Enter field.</small>
             </div>
           </div>
-          <div class="form-group">
-            <button type="submit" (click)="addItem()" class="btn btn-outline-dark" style="border-radius: 0px;" [disabled]="addForm?.invalid || submitted" data-dismiss="modal">Add</button>
-            <button type="button" class="btn btn-outline-danger" style="border-radius: 0px;" data-dismiss="modal">Close</button>
-          </div>
         </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+      <div *nzModalFooter>
+        <button class="btn btn-outline-dark" style="border-radius: 0px; margin-left: 10px;" (click)="handleAddOk()" >Ok</button>
+        <button class="btn btn-outline-danger" style="border-radius: 0px;" (click)="handleAddCancel()">Cancel</button>
       </div>
-    </div>
-  </div>
-</div>
+</nz-modal>
 
-<!--Modal Update Item-->
-<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Update Provider</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form [formGroup]="updateForm" (ngSubmit)="updateItem()">
-          <div class="form-group" [ngClass]="{invalid: updateForm.get('oldRouteTypeId')?.touched && updateForm.get('oldRouteTypeId')?.invalid}">
-            <label class="col-form-label" style="font-weight: bold" for="oldRouteTypeId">routeTypeId: </label>
-            <input class="form-control" style="border-radius: 0px;" id="oldRouteTypeId" type="text" formControlName="oldRouteTypeId">
-            <input class="form-control" style="border-radius: 0px;" id="updateId" type="number" hidden formControlName="updateId">
-            <div class="validation" *ngIf="updateForm.get('oldRouteTypeId')?.touched && updateForm.get('oldRouteTypeId')?.invalid">
-              <small *ngIf="updateForm.get('oldRouteTypeId')?.errors?.required">Enter field.</small>
+<nz-modal
+      [(nzVisible)]="isUpdateVisible"
+      nzTitle="Update route"
+      (nzOnCancel)="handleUpdateCancel()"
+      (nzOnOk)="handleUpdateOk()"
+      [nzOkLoading]="isUpdateOkLoading"
+    >
+      <div *nzModalContent>
+        <form [formGroup]="form">
+          <div class="form-group" [ngClass]="{invalid: form.get('routeTypeId')?.touched && form.get('routeTypeId')?.invalid}">
+            <label class="col-form-label" style="font-weight: bold" for="routeTypeId">Route type id: </label>
+            <input class="form-control" style="border-radius: 0px;" id="routeTypeId" type="number" formControlName="routeTypeId">
+            <div class="validation" *ngIf="form.get('routeTypeId')?.touched && form.get('routeTypeId')?.invalid">
+              <small *ngIf="form.get('routeTypeId')?.errors?.required">Enter field.</small>
             </div>
           </div>
-          <div class="form-group">
-            <button type="submit" (click)="updateItem()" class="btn btn-outline-dark" style="border-radius: 0px;" [disabled]="updateForm?.invalid || submitted" data-dismiss="modal">Update</button>
-            <button type="button" class="btn btn-outline-danger" style="border-radius: 0px;" data-dismiss="modal">Close</button>
-          </div>
         </form>
       </div>
-      <!--<div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>-->
-    </div>
-  </div>
-</div>
+      <div *nzModalFooter>
+        <button class="btn btn-outline-dark" style="border-radius: 0px; margin-left: 10px;" (click)="handleUpdateOk()" >Ok</button>
+        <button class="btn btn-outline-danger" style="border-radius: 0px;" (click)="handleUpdateCancel()">Cancel</button>
+      </div>
+</nz-modal>
 
-<!--Modal Delete Item-->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Delete Provider</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+<nz-modal
+      [(nzVisible)]="isDeleteVisible"
+      nzTitle="Delete route"
+      (nzOnCancel)="handleDeleteCancel()"
+      (nzOnOk)="handleDeleteOk()"
+      [nzOkLoading]="isDeleteOkLoading"
+    >
+      <div *nzModalContent>
+        <p>
+          Are you sure want delete this route?
+        </p>
       </div>
-      <div class="modal-body">
-        <form [formGroup]="deleteForm" (ngSubmit)="deleteItem()">
-          <div class="form-group">
-            <label class="col-form-label" style="font-weight: bold">Are You shure? </label>
-            <input class="form-control" style="border-radius: 0px;" id="deleteId" type="number" hidden formControlName="deleteId">
-          </div>
-          <div class="form-group">
-            <button type="submit" (click)="deleteItem()" class="btn btn-outline-dark" style="border-radius: 0px;" [disabled]="deleteForm?.invalid || submitted" data-dismiss="modal">Delete</button>
-            <button type="button" class="btn btn-outline-danger" style="border-radius: 0px;" data-dismiss="modal">Close</button>
-          </div>
-        </form>
+      <div *nzModalFooter>
+        <button class="btn btn-outline-dark" style="border-radius: 0px; margin-left: 10px;" (click)="handleDeleteOk()" >Ok</button>
+        <button class="btn btn-outline-danger" style="border-radius: 0px;" (click)="handleDeleteCancel()">Cancel</button>
       </div>
-      <!--<div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>-->
-    </div>
-  </div>
-</div>
+</nz-modal>
 
 <ng-template #loading>
   <div>Loading...</div>

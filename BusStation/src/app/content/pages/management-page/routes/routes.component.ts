@@ -1,5 +1,7 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { RouteIncomingDTO } from 'src/app/core/models/incoming/route-incoming-dto';
 import { RouteOutgoingDTO } from 'src/app/core/models/outgoing/route-outgoing-dto';
 import { RouteService } from 'src/app/core/services/route.service';
@@ -10,29 +12,21 @@ import { RouteService } from 'src/app/core/services/route.service';
   styleUrls: ['./routes.component.scss']
 })
 export class RoutesComponent implements OnInit {
-  public buses: RouteIncomingDTO[] = [];
+  public routes: RouteIncomingDTO[] = [];
 
-  public addForm: FormGroup = new FormGroup({});
-  public updateForm: FormGroup = new FormGroup({});
-  public deleteForm: FormGroup = new FormGroup({});
+  public form: FormGroup = new FormGroup({});
+  public currentId: number;
 
   public submitted = false;
   public message: string = '';
   public isLoading: boolean = true;
 
-  constructor(
-    private routeService: RouteService) { }
+  constructor(private routeService: RouteService,
+              private notification: NzNotificationService) { }
 
   ngOnInit(): void {
-    this.addForm = new FormGroup({
+    this.form = new FormGroup({
       routeTypeId: new FormControl('', [Validators.required])
-    });
-    this.updateForm = new FormGroup({
-      oldRouteTypeId: new FormControl('', [Validators.required]),
-      updateId: new FormControl('', [Validators.required]),
-    });
-    this.deleteForm = new FormGroup({
-      deleteId: new FormControl()
     });
     this.sendQuery();
   }
@@ -40,7 +34,7 @@ export class RoutesComponent implements OnInit {
   public sendQuery(): void {
     this.isLoading = true;
     this.routeService.GetAllRoutes().subscribe(data => {
-      this.buses = data;
+      this.routes = data;
       this.isLoading = false;
     });
   }
@@ -53,43 +47,111 @@ export class RoutesComponent implements OnInit {
     this.onPageChange();
   }
 
-  public putDataToUpdate(id: number, bus: RouteOutgoingDTO): void {
-    this.updateForm.controls['oldRouteTypeId'].setValue(bus.routeTypeId);
-    this.updateForm.controls['updateId'].setValue(id);
+  isAddVisible = false;
+  isAddOkLoading = false;
+  showAddModal(): void {
+    this.isAddVisible = true;
   }
 
-  public putDataToDelete(id: number): void {
-    this.deleteForm.controls['deleteId'].setValue(id);
-  }
+  handleAddOk(): void {
+    this.isAddOkLoading = true;
 
-  public updateItem(): void {
-    if (this.updateForm.invalid) return;
+    if (this.form.invalid) {
+      this.isAddOkLoading = false;
+      return;
+    }
 
-    this.submitted = true;
-
-    const bus: RouteOutgoingDTO = {
-      routeTypeId: this.addForm.value.routeTypeId
+    const route: RouteOutgoingDTO = {
+      routeTypeId: this.form.value.routeTypeId
     };
 
-    this.routeService.UpdateRoute(this.updateForm.value.id, bus).subscribe();
+    this.routeService.CreateRoute(route).subscribe(res =>{
+      this.writeNotification("Result adding!", "New route was added in database.")
+      this.isAddVisible = false;
+      this.isAddOkLoading = false;
+      this.sendQuery();
+    },
+    (err: HttpErrorResponse)=>{
+      console.log(err);
+      this.writeNotification("Invalid entity!", err.status != 500 ? err.message : "Something went wrong!");
+    });
   }
 
-  public deleteItem(): void {
-    if (this.deleteForm.invalid) return;
-
-    this.submitted = true;
-    this.routeService.DeleteRoute(this.deleteForm.value.deleteId).subscribe();
+  handleAddCancel(): void {
+    this.isAddVisible = false;
   }
 
-  public addItem(): void {
-    if (this.addForm.invalid) return;
 
-    this.submitted = true;
+  isUpdateVisible = false;
+  isUpdateOkLoading = false;
+  showUpdateModal(id: number, route: RouteIncomingDTO): void {
+    this.form.controls['routeTypeId'].setValue(route.routeTypeId);
+    this.currentId = id;
+    this.isUpdateVisible = true;
+  }
 
-    const bus: RouteOutgoingDTO = {
-      routeTypeId: this.addForm.value.routeTypeId
+  handleUpdateOk(): void {
+    this.isUpdateOkLoading = true;
+
+    if (this.form.invalid) {
+      this.isUpdateOkLoading = false;
+      return;
+    }
+
+    const route: RouteOutgoingDTO = {
+      routeTypeId: this.form.value.routeTypeId
     };
 
-    this.routeService.CreateRoute(bus).subscribe();
+    this.routeService.UpdateRoute(this.currentId, route).subscribe(res =>{
+      this.writeNotification("Result updating!", "The route was updated in database.")
+      this.isUpdateVisible = false;
+      this.isUpdateOkLoading = false;
+      this.sendQuery();
+    },
+    (err: HttpErrorResponse)=>{
+      this.writeNotification("Invalid entity!", err.status != 500 ? err.message : "Something went wrong!");
+     });
+    }
+
+  handleUpdateCancel(): void {
+    this.isUpdateVisible = false;
+  }
+
+  isDeleteVisible = false;
+  isDeleteOkLoading = false;
+  showDeleteModal(id: number): void {
+    this.currentId = id;
+    this.isDeleteVisible = true;
+  }
+
+  handleDeleteOk(): void {
+    this.isDeleteOkLoading = true;
+
+    if (this.form.invalid) {
+      this.isDeleteOkLoading = false;
+      return;
+    }
+
+    this.routeService.DeleteRoute(this.currentId).subscribe(res =>{
+      this.writeNotification("Result deleting!", "The route was deleted from database.");
+      this.isDeleteVisible = false;
+      this.isDeleteOkLoading = false;
+      this.sendQuery();
+    },
+    (err: HttpErrorResponse)=>{
+      this.writeNotification("Invalid entity!", err.status != 500 ? err.message : "Something went wrong!");
+    });
+  }
+
+  handleDeleteCancel(): void {
+    this.isDeleteVisible = false;
+  }
+
+  writeNotification(header: string, text:string){
+    this.notification.blank(
+      header,
+      text,
+      { nzDuration: 10000 }
+    );
   }
 }

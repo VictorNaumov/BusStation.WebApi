@@ -52,7 +52,7 @@ namespace BusStation.WebApi
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.ConfigureExceptionHandler();
+            app.ConfigureExceptionHandler();
             app.UseHttpsRedirection();
             app.UseCors("CorsPolicy");
             app.UseForwardedHeaders(new ForwardedHeadersOptions

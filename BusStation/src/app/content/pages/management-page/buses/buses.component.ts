@@ -1,9 +1,10 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { BusIncomingDTO } from 'src/app/core/models/incoming/bus-incoming-dto';
 import { BusOutgoingDTO } from 'src/app/core/models/outgoing/bus-outgoing-dto';
 import { BusParameters } from 'src/app/core/models/utility/bus-parameters';
-import { Pagination } from 'src/app/core/models/utility/pagination.interfaces';
 import { BusService } from 'src/app/core/services/bus.service';
 
 @Component({
@@ -14,9 +15,8 @@ import { BusService } from 'src/app/core/services/bus.service';
 export class BusesComponent implements OnInit {
   public buses: BusIncomingDTO[] = [];
 
-  public addForm: FormGroup = new FormGroup({});
-  public updateForm: FormGroup = new FormGroup({});
-  public deleteForm: FormGroup = new FormGroup({});
+  public form: FormGroup = new FormGroup({});
+  public currentId: number;
 
   public submitted = false;
   public message: string = '';
@@ -28,25 +28,16 @@ export class BusesComponent implements OnInit {
   }
 
   constructor(
-    private busService: BusService) { }
+    private busService: BusService,
+    private notification: NzNotificationService) { }
 
   ngOnInit(): void {
     this.sendQuery();
-    this.addForm = new FormGroup({
+    this.form = new FormGroup({
       name: new FormControl('', [Validators.required]),
       countOfSeats: new FormControl('', [Validators.required]),
       driver: new FormControl('', [Validators.required]),
       number: new FormControl('', [Validators.required]),
-    });
-    this.updateForm = new FormGroup({
-      oldName: new FormControl('', [Validators.required]),
-      oldCountOfSeats: new FormControl('', [Validators.required]),
-      oldDriver: new FormControl('', [Validators.required]),
-      oldNumber: new FormControl('', [Validators.required]),
-      updateId: new FormControl()
-    });
-    this.deleteForm = new FormGroup({
-      deleteId: new FormControl()
     });
   }
 
@@ -68,51 +59,120 @@ export class BusesComponent implements OnInit {
     this.onPageChange();
   }
 
-  public putDataToUpdate(id: number, bus: BusOutgoingDTO): void {
-    this.updateForm.controls['oldName'].setValue(bus.name);
-    this.updateForm.controls['oldNumber'].setValue(bus.name);
-    this.updateForm.controls['oldDriver'].setValue(bus.name);
-    this.updateForm.controls['oldCountOfSeats'].setValue(bus.name);
-    this.updateForm.controls['updateId'].setValue(id);
+
+  isAddVisible = false;
+  isAddOkLoading = false;
+  showAddModal(): void {
+    this.isAddVisible = true;
   }
 
-  public putDataToDelete(id: number): void {
-    this.deleteForm.controls['deleteId'].setValue(id);
-  }
+  handleAddOk(): void {
+    this.isAddOkLoading = true;
 
-  public updateItem(): void {
-    if (this.updateForm.invalid) return;
-
-    this.submitted = true;
+    if (this.form.invalid) {
+      this.isAddOkLoading = false;
+      return;
+    }
 
     const bus: BusOutgoingDTO = {
-      name: this.updateForm.value.oldName,
-      number: this.updateForm.value.oldNumber,
-      driver: this.updateForm.value.oldDriver,
-      countOfSeats: this.updateForm.value.oldCountOfSeats,
+      name: this.form.value.name,
+      driver: this.form.value.driver,
+      number: this.form.value.number,
+      countOfSeats: this.form.value.countOfSeats
     };
-    this.busService.UpdateBus(this.updateForm.value.id, bus).subscribe();
+
+    this.busService.CreateBus(bus).subscribe(res =>{
+      this.writeNotification("Result adding!", "New bus was added in database.")
+      this.isAddVisible = false;
+      this.isAddOkLoading = false;
+      this.sendQuery();
+    },
+    (err: HttpErrorResponse)=>{
+      this.writeNotification("Invalid entity!", err.status != 500 ? err.message : "Something went wrong!");
+    });
   }
 
-  public deleteItem(): void {
-    if (this.deleteForm.invalid) return;
-
-    this.submitted = true;
-    this.busService.DeleteBus(this.deleteForm.value.deleteId).subscribe();
+  handleAddCancel(): void {
+    this.isAddVisible = false;
   }
 
-  public addItem(): void {
-    if (this.addForm.invalid) return;
 
-    this.submitted = true;
+  isUpdateVisible = false;
+  isUpdateOkLoading = false;
+  showUpdateModal(id: number, bus: BusIncomingDTO): void {
+    this.form.controls['name'].setValue(bus.name);
+    this.form.controls['number'].setValue(bus.number);
+    this.form.controls['driver'].setValue(bus.driver);
+    this.form.controls['countOfSeats'].setValue(bus.countOfSeats);
+    this.currentId = id;
+    this.isUpdateVisible = true;
+  }
+
+  handleUpdateOk(): void {
+    this.isUpdateOkLoading = true;
+
+    if (this.form.invalid) {
+      this.isUpdateOkLoading = false;
+      return;
+    }
 
     const bus: BusOutgoingDTO = {
-      name: this.addForm.value.name,
-      driver: this.addForm.value.driver,
-      number: this.addForm.value.number,
-      countOfSeats: this.addForm.value.countOfSeats
+      name: this.form.value.name,
+      driver: this.form.value.driver,
+      number: this.form.value.number,
+      countOfSeats: this.form.value.countOfSeats
     };
 
-    this.busService.CreateBus(bus).subscribe();
+    this.busService.UpdateBus(this.currentId, bus).subscribe(res =>{
+      this.writeNotification("Result updating!", "The bus was updated in database.")
+      this.isUpdateVisible = false;
+      this.isUpdateOkLoading = false;
+      this.sendQuery();
+    },
+    (err: HttpErrorResponse)=>{
+      this.writeNotification("Invalid entity!", err.status != 500 ? err.message : "Something went wrong!");
+     });
+    }
+
+  handleUpdateCancel(): void {
+    this.isUpdateVisible = false;
+  }
+
+  isDeleteVisible = false;
+  isDeleteOkLoading = false;
+  showDeleteModal(id: number): void {
+    this.currentId = id;
+    this.isDeleteVisible = true;
+  }
+
+  handleDeleteOk(): void {
+    this.isDeleteOkLoading = true;
+
+    if (this.form.invalid) {
+      this.isDeleteOkLoading = false;
+      return;
+    }
+
+    this.busService.DeleteBus(this.currentId).subscribe(res =>{
+      this.writeNotification("Result deleting!", "The bus was deleted from database.");
+      this.isDeleteVisible = false;
+      this.isDeleteOkLoading = false;
+      this.sendQuery();
+    },
+    (err: HttpErrorResponse)=>{
+      this.writeNotification("Invalid entity!", err.status != 500 ? err.message : "Something went wrong!");
+    });
+  }
+
+  handleDeleteCancel(): void {
+    this.isDeleteVisible = false;
+  }
+
+  writeNotification(header: string, text:string){
+    this.notification.blank(
+      header,
+      text,
+      { nzDuration: 10000 }
+    );
   }
 }
